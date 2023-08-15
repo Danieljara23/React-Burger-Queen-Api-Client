@@ -1,3 +1,31 @@
+:root {
+  --red-300-: #ff6767;
+  --yellow-400-: #ffcc00;
+  --white-: #FFFFFF;
+}
+
+.btn-container {
+  padding: 0 20px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btn {
+  width: 250px;
+}
+
+.btn-red {
+  background-color: var(--white-);
+  color: var(--red-300-);
+  border: 1px solid var(--red-300-);
+}
+
+.btn-red:hover {
+  background-color: var(--red-300-);
+  color: var(--white-);
+  border: 1px solid var(--red-300-);
+}
+
 .table-header, .table-body-row {
   display: flex;
   flex-direction: row;
@@ -11,4 +39,32 @@
 .table-header-item, .table-body-row > div {
   width: 25%;
   text-align: center;
+}
+
+.table-body-row > div:last-child {
+  display: flex;
+  justify-content: space-around;
+}
+
+.table-body-row button {
+  width: 100px;
+  border: 1px solid var(--yellow-400-);
+  background-color:var(--yellow-400-);
+}
+
+.table-body-row button:hover {
+  color: var(--yellow-400-);
+  border: 1px solid var(--yellow-400-);
+  background-color: var(--white-);
+}
+
+.table-body-row button:nth-child(2) {
+  color: var(--white-);
+  border: 1px solid var(--red-300-);
+  background-color: var(--red-300-);
+}
+
+.table-body-row button:nth-child(2):hover {
+  color: var(--red-300-);
+  background-color: var(--white-);
 }
