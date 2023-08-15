@@ -1,0 +1,14 @@
+.table-header, .table-body-row {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+.table-header {
+  font-weight: bold;
+}
+
+.table-header-item, .table-body-row > div {
+  width: 25%;
+  text-align: center;
+}
