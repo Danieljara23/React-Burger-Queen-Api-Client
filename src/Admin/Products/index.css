@@ -1,7 +1,7 @@
 :root {
   --red-300-: #ff6767;
   --yellow-400-: #ffcc00;
-  --white-: #FFFFFF;
+  --white-: #ffffff;
 }
 
 .btn-container {
@@ -26,7 +26,8 @@
   border: 1px solid var(--red-300-);
 }
 
-.table-header, .table-body-row {
+.table-header,
+.table-body-row {
   display: flex;
   flex-direction: row;
   width: 100%;
@@ -36,20 +37,23 @@
   font-weight: bold;
 }
 
-.table-header-item, .table-body-row > div {
+.table-header-item,
+.table-body-row > div {
   width: 25%;
   text-align: center;
 }
 
 .table-body-row > div:last-child {
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
+  gap: 10px;
 }
 
 .table-body-row button {
   width: 100px;
   border: 1px solid var(--yellow-400-);
-  background-color:var(--yellow-400-);
+  background-color: var(--yellow-400-);
+  height: 40px;
 }
 
 .table-body-row button:hover {

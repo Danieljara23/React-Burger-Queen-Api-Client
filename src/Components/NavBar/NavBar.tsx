@@ -5,7 +5,7 @@ interface NavBarProps {
 	user: IUser;
 }
 
-const NavBar : React.FC<NavBarProps> = ({ onLogout, user }) => {
+const NavBar = ({ onLogout, user }: NavBarProps) => {
 	const userSignedIn = user.id > 0;
 
 	return (userSignedIn &&
