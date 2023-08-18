@@ -3,7 +3,7 @@ import "./ProductList.css";
 
 interface ProductListProps {
 	products: IProduct[];
-	onAddProduct: (p: IProduct) => void;
+	onAddProduct: (product: IProduct) => void;
 }
 
 const ProductList : React.FC<ProductListProps> = ({ products, onAddProduct: addProduct }) => {

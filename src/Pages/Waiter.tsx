@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { getProducts } from "../Services/ProductRepository";
 import { PRODUCT_TYPE, IProduct } from "../Models/Product.d";
-import { EventOnChange } from "../Models/Event.d";
 import { IOrder, IOrderProduct, } from "../Models/Order.d";
 import ProductList from "../Components/ProductList/ProductList";
 import "./Waiter.css"
@@ -19,7 +18,7 @@ const Waiter: React.FC<WaiterProps> = () => {
 	const [activeTab, setActiveTab] = useState(PRODUCT_TYPE.breakfast);
 	const [order, setOrder] = useState<IOrder>({ costumer: "", products: [] });
 	const tabButtonClass = (prodType: PRODUCT_TYPE) => activeTab === prodType ? "" : "pseudo";
-	const handleChangeCustomer = (e: EventOnChange) => setOrder( { ...order, costumer: e.target.value} );
+	const handleChangeCustomer = (e: React.ChangeEvent<HTMLInputElement>) => setOrder( { ...order, costumer: e.target.value} );
 
 	/**
 	 * add or remove product from order product list
@@ -28,14 +27,14 @@ const Waiter: React.FC<WaiterProps> = () => {
 	 */
 	const modifyProductList = (add: boolean, productToModify: IProduct) => {
 		const modifier = add ? 1 : -1;
-		const alreadyInList = order.products.find((p: IOrderProduct) => p.product.id === productToModify.id);
+		const alreadyInList = order.products.find((orderProduct: IOrderProduct) => orderProduct.product.id === productToModify.id);
 		const mappedList =
-			order.products.map((p: IOrderProduct) => {
-				const isThis = p.product.id === productToModify.id;
+			order.products.map((orderProduct: IOrderProduct) => {
+				const isThis = orderProduct.product.id === productToModify.id;
 
 				return {
-					...p,
-					qty: isThis ? p.qty + modifier : p.qty
+					...orderProduct,
+					qty: isThis ? orderProduct.qty + modifier : orderProduct.qty
 				}
 			});
 		const thisProd = {
