@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import "./index.css";
-import { IProduct } from "../../Models/Product";
-import { getProducts } from "../../Services/ProductRepository";
+import { IProduct, PRODUCT_TYPE } from "../../Models/Product.d.ts";
+import { getProducts, addProduct } from "../../Services/ProductRepository";
+import AdminProductList from "./Components/AdminProductList";
+import AddProduct from "./Components/AddProduct";
 
 const ProductsAdmin = () => {
   const [products, setProducts] = useState<IProduct[]>([]);
@@ -11,12 +13,26 @@ const ProductsAdmin = () => {
     });
   }, []);
 
+  const addProductHandler = () => {
+    const product = {
+      id: 4,
+      dateEntry: '',
+      name: "Smoothie",
+      price: 8,
+      image: "https://picsum.photos/536/354",
+      type: PRODUCT_TYPE.breakfast,
+    }
+    addProduct(product).then((product)=>{
+      console.log(product)
+    }).catch(error=>console.error(error))
+  }
+
+  console.log(products)
+
   return (
     <>
       <h2>Products Admin Dashboard</h2>
-      <div className="btn-container">
-        <button className="btn btn-red">Create product</button>
-      </div>
+      <AddProduct addProductHandler={addProductHandler}/>
       <section className="products-container">
         <div className="table-header">
           <div className="table-header-item">Nombre del producto</div>
@@ -25,25 +41,7 @@ const ProductsAdmin = () => {
           <div className="table-header-item">Acciones</div>
         </div>
         <div className="table-body">
-          {products.map((product: IProduct) => {
-            return (
-              <div className="table-body-row" key={product.id + product.name}>
-                <div>
-                  <p>{product.name}</p>
-                </div>
-                <div>
-                  <p>{product.type}</p>
-                </div>
-                <div>
-                  <p>${product.price}</p>
-                </div>
-                <div>
-                  <button>Edit</button>
-                  <button>Delete</button>
-                </div>
-              </div>
-            );
-          })}
+          <AdminProductList products={products}/>
         </div>
       </section>
     </>

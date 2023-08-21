@@ -7,10 +7,22 @@ import { host, jsonFetch } from "./CommonService";
  * @returns Promise<token>
  */
 export function getProducts(): Promise<IProduct[]> {
-    const url = host + "/products";
+  const url = host + "/products";
 
-    return jsonFetch({
-        url,
-        method: "GET"
-    });
+  return jsonFetch({
+      url,
+      method: "GET"
+  });
+}
+
+export function addProduct(product:IProduct): Promise<IProduct[]> {
+  const url = host + "/products";
+
+  return jsonFetch({
+      url,
+      method: "POST",
+      body: {
+        ...product
+      }
+  });
 }

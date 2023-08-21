@@ -11,8 +11,7 @@ import { PATHNAMES } from "../../Routes/Routes";
 interface LoginFormProps {
 
 }
-
-const LoginForm: React.FC<LoginFormProps> = () => {
+const LoginForm = ({}: LoginFormProps) => {
 	const navigate = useNavigate();
 
 	const initialFormState = {
