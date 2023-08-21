@@ -4,12 +4,6 @@
   --white-: #ffffff;
 }
 
-.btn-container {
-  padding: 0 20px;
-  display: flex;
-  justify-content: flex-end;
-}
-
 .btn {
   width: 250px;
 }
@@ -71,4 +65,37 @@
 .table-body-row button:nth-child(2):hover {
   color: var(--red-300-);
   background-color: var(--white-);
+}
+
+
+.add-product-container {
+  padding: 0 20px;
+  display: flex;
+  justify-content: flex-end;
+  position: relative;
+}
+
+.modal-container {
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  border-radius: 10px;
+  right: calc(100% - 50% - 300px);
+  background-color: white;
+  box-shadow: 0px 0px 8px lightgray;
+  display: flex;
+  flex-direction: column;
+  padding: 8px 25px;
+}
+
+.close-button {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+  background: var(--red-300-);
+  color: var(--white-)
+}
+
+input {
+  margin-bottom: 10px;
 }

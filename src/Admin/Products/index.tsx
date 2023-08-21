@@ -1,33 +1,33 @@
 import { useEffect, useState } from "react";
 import "./index.css";
-import { IProduct, PRODUCT_TYPE } from "../../Models/Product.d.ts";
+import { IProduct } from "../../Models/Product";
 import { getProducts, addProduct } from "../../Services/ProductRepository";
 import AdminProductList from "./Components/AdminProductList";
 import AddProduct from "./Components/AddProduct";
 
 const ProductsAdmin = () => {
   const [products, setProducts] = useState<IProduct[]>([]);
+
   useEffect(() => {
+    getAllProducts();
+  }, []);
+
+  const getAllProducts = () => {
     getProducts().then((newProducts) => {
       setProducts(newProducts);
     });
-  }, []);
+  }
 
-  const addProductHandler = () => {
-    const product = {
-      id: 4,
-      dateEntry: '',
-      name: "Smoothie",
-      price: 8,
-      image: "https://picsum.photos/536/354",
-      type: PRODUCT_TYPE.breakfast,
-    }
-    addProduct(product).then((product)=>{
-      console.log(product)
+  const addProductHandler = (product:IProduct) => {
+    const productObject = {
+      ...product,
+      id: products.length + 1
+    }   
+    addProduct(productObject).then((product)=>{
+      getAllProducts()
     }).catch(error=>console.error(error))
   }
 
-  console.log(products)
 
   return (
     <>
