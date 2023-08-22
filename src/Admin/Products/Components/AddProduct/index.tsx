@@ -1,17 +1,28 @@
-import { useState } from "react"
-import { IProduct, PRODUCT_TYPE } from "../../../../Models/Product.d.ts";
+import { FormEvent, useState } from "react"
+import { IProduct, PRODUCT_TYPE } from "../../../../Models/Product";
 
 interface AddProductProps{
   addProductHandler: (product:IProduct) => void
 }
 
+interface CustomElements extends HTMLFormControlsCollection   {
+  name: HTMLInputElement;
+  price: HTMLInputElement;
+  type: HTMLInputElement;
+}
+
+interface CustomFormProps extends HTMLFormElement {
+  readonly elements: CustomElements;
+}
+
 function AddProduct({addProductHandler}:AddProductProps) {
   const [showModal, setShowModal] = useState(false);
 
-  const handleSubmit = (e)=> {
+  const handleSubmit = (e:FormEvent<CustomFormProps>)=> {
     e.preventDefault();
 
     const form = e.target;
+    // @ts-ignore
     const formData = new FormData(form);
     console.log({formData})
     const formJson = Object.fromEntries(formData.entries());

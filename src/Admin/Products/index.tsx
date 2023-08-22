@@ -23,7 +23,7 @@ const ProductsAdmin = () => {
       ...product,
       id: products.length + 1
     }   
-    addProduct(productObject).then((product)=>{
+    addProduct(productObject).then(()=>{
       getAllProducts()
     }).catch(error=>console.error(error))
   }

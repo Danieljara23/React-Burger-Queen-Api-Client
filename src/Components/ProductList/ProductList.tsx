@@ -1,4 +1,4 @@
-import { IProduct } from "../../Models/Product.d";
+import { IProduct } from "../../Models/Product";
 import "./ProductList.css";
 
 interface ProductListProps {

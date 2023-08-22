@@ -1,6 +1,6 @@
 import { EventOnChange } from "../../Models/Event.d";
 import { IOrder, IOrderProduct } from "../../Models/Order.d";
-import { IProduct } from "../../Models/Product.d";
+import { IProduct } from "../../Models/Product";
 import OrderProductList from "../OrderProductList/OrderProductList";
 import "./CreateOrder.css";
 

@@ -1,4 +1,4 @@
-import { IProduct } from "../Models/Product.d";
+import { IProduct } from "../Models/Product";
 import { host, jsonFetch } from "./CommonService";
 
 /**

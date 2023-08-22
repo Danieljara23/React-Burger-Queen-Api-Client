@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { getProducts } from "../Services/ProductRepository";
-import { PRODUCT_TYPE, IProduct } from "../Models/Product.d";
+import { PRODUCT_TYPE, IProduct } from "../Models/Product";
 import { EventOnChange } from "../Models/Event.d";
 import { IOrder, IOrderProduct, } from "../Models/Order.d";
 import ProductList from "../Components/ProductList/ProductList";
