@@ -1,13 +1,15 @@
 import { IProduct } from "./Product";
 
-export enum ROLES {
-	admin = 'admin',
-	waiter = 'waiter',
-	chef = 'chef'
+export enum ORDER_STATUS {
+	pending = 'pending',
+	ready = 'ready',
 };
 
 export interface IOrder {
-	costumer: string;
+	userId: number;
+	status: ORDER_STATUS;
+	dateEntry: string;
+	client: string;
     products: IOrderProduct[];
 };
 
