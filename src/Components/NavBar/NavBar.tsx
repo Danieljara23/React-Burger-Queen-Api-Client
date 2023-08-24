@@ -12,7 +12,7 @@ const NavBar : React.FC<NavBarProps> = ({ onLogout, user }) => {
 	<nav>
 		<ul>
 			<li>
-				<a href='#' onClick={onLogout}>Sign out</a>
+				<button onClick={onLogout}>Sign out</button>
 			</li>
 		</ul>
 	</nav>

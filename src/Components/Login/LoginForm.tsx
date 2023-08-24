@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { EventOnChange, EventPreventDefault } from '../../Models/Event.d';
 import { IUser } from "../../Models/User.d";
 import { ILoginResponse } from "../../Models/Response.d";
 import { createSession, login } from "../../Services/TokenRepository";
@@ -26,16 +25,16 @@ const LoginForm: React.FC<LoginFormProps> = () => {
 
 	const [message, setMessage] = useState("");
 
-	const handleChangeEmail = (e: EventOnChange) => setFormData({ ...formData, email: e.target.value });
+	const handleChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, email: e.target.value });
 
-	const handleChangePassword = (e: EventOnChange) => setFormData({ ...formData, password: e.target.value });
+	const handleChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, password: e.target.value });
 
 	const handleSession = (token: string, user: IUser) => {
 		createSession(token, user);
 		navigate(PATHNAMES.HOME);
 	};
 
-	const handleSubmit = (e: EventPreventDefault) => {
+	const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		setMessage("");
 		setLoginLoading(true);

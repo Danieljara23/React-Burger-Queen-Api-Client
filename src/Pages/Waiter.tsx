@@ -1,25 +1,48 @@
 import { useEffect, useState } from "react";
 import { getProducts } from "../Services/ProductRepository";
 import { PRODUCT_TYPE, IProduct } from "../Models/Product.d";
-import { EventOnChange } from "../Models/Event.d";
-import { IOrder, IOrderProduct, } from "../Models/Order.d";
+import { IOrder, IOrderProduct, ORDER_STATUS, } from "../Models/Order.d";
 import ProductList from "../Components/ProductList/ProductList";
 import "./Waiter.css"
 import CreateOrder from "../Components/CreateOrder/CreateOrder";
+import { getSession } from "../Services/TokenRepository";
+import { createOrder } from "../Services/OrderRepository";
 
 const ADD_PRODUCT = true;
 const REMOVE_PRODUCT = false;
 
-interface WaiterProps {
-
-}
+interface WaiterProps {}
 
 const Waiter: React.FC<WaiterProps> = () => {
+	const { userId } = getSession();
 	const [products, setProducts] = useState<IProduct[]>([]);
+	const [orderMsg, setOrderMsg] = useState<string>("");
 	const [activeTab, setActiveTab] = useState(PRODUCT_TYPE.breakfast);
-	const [order, setOrder] = useState<IOrder>({ costumer: "", products: [] });
+	const initialOrder: IOrder = {
+		client: "",
+		products: [],
+		userId: userId,
+		status: ORDER_STATUS.pending,
+		dateEntry: ""
+	};
+	const [order, setOrder] = useState<IOrder>(initialOrder);
 	const tabButtonClass = (prodType: PRODUCT_TYPE) => activeTab === prodType ? "" : "pseudo";
-	const handleChangeCustomer = (e: EventOnChange) => setOrder( { ...order, costumer: e.target.value} );
+	const onSetOrder = (newOrder: IOrder) => {
+		setOrderMsg("");
+		setOrder(newOrder);
+	};
+	const handleChangeCustomer = (e: React.ChangeEvent<HTMLInputElement>) => onSetOrder( { ...order, client: e.target.value} );
+	const handleSubmitCreateOrder = (e: React.ChangeEvent<HTMLFormElement>) => {
+		e.preventDefault();
+		createOrder(order)
+			.then(() => {
+				onSetOrder(initialOrder);
+				setOrderMsg("Your order has been created");
+			})
+			.catch(() => {
+				setOrderMsg("Something went wrong creating your order");
+			});
+	}
 
 	/**
 	 * add or remove product from order product list
@@ -28,14 +51,14 @@ const Waiter: React.FC<WaiterProps> = () => {
 	 */
 	const modifyProductList = (add: boolean, productToModify: IProduct) => {
 		const modifier = add ? 1 : -1;
-		const alreadyInList = order.products.find((p: IOrderProduct) => p.product.id === productToModify.id);
+		const alreadyInList = order.products.find((orderProduct: IOrderProduct) => orderProduct.product.id === productToModify.id);
 		const mappedList =
-			order.products.map((p: IOrderProduct) => {
-				const isThis = p.product.id === productToModify.id;
+			order.products.map((orderProduct: IOrderProduct) => {
+				const isThis = orderProduct.product.id === productToModify.id;
 
 				return {
-					...p,
-					qty: isThis ? p.qty + modifier : p.qty
+					...orderProduct,
+					qty: isThis ? orderProduct.qty + modifier : orderProduct.qty
 				}
 			});
 		const thisProd = {
@@ -44,7 +67,7 @@ const Waiter: React.FC<WaiterProps> = () => {
 		};
 		const newList = alreadyInList ? mappedList : [...order.products, thisProd];
 
-		setOrder({
+		onSetOrder({
 			...order,
 			products: newList.filter(({ qty }) => qty > 0)
 		});
@@ -86,6 +109,8 @@ const Waiter: React.FC<WaiterProps> = () => {
 					onRemoveProduct={handleRemoveProduct} 
 					onAddProduct={handleAddProduct} 
 					onChangeCustomer={handleChangeCustomer}
+					onSubmit={handleSubmitCreateOrder}
+					orderMsg={orderMsg}
 				/>
 			</section>
 		</div>

@@ -16,13 +16,13 @@ const Layout : React.FC<LayoutProps> = () => {
 
 	return (<>
 		<header>
-			<span>KvnBurger</span>
+			<span>LabBurger</span>
 			<NavBar user={user} onLogout={onLogout} />
 		</header>
 		<main>
 			<Outlet />
 		</main>
-		<footer>Laboratoria - Created by Kvn</footer>
+		<footer>Created by Laboratoria</footer>
 	</>);
 }
 

@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { ROLES } from "../../Models/Role.d";
 import { getSession } from "../../Services/TokenRepository";
 import { PATHNAMES } from "../../Routes/Routes";
@@ -7,34 +7,33 @@ import './Dashboard.css';
 const Dashboard: React.FC = () => {
 
 	const { user } = getSession();
-	const navigate = useNavigate();
 
 	return <ul>
 		{
 			user.role === ROLES.admin && <>
 				<li>
-					<button onClick={() => navigate(PATHNAMES.PRODUCTS)}>Administrar productos</button>
+					<Link to={PATHNAMES.PRODUCTS}>Administrar productos</Link>
 				</li>
 				<li>
-					<button onClick={() => navigate(PATHNAMES.USERS)}>Administrar usuarios</button>
+					<Link to={PATHNAMES.USERS}>Administrar usuarios</Link>
 				</li>
 			</>
 		}
 		{
 			(user.role === ROLES.admin || user.role === ROLES.waiter) && <>
 				<li>
-					<button onClick={() => navigate(PATHNAMES.ORDERS + '/' + PATHNAMES.CREATE)}>Crear pedidos</button>
+					<Link to={PATHNAMES.ORDERS + '/' + PATHNAMES.CREATE}>Crear pedidos</Link>
 				</li>
 			</>
 		}
 		<li>
-			<button onClick={() => navigate(PATHNAMES.ORDERS + '/' + PATHNAMES.PENDING)}>Ver pedidos por preparar</button>
+			<Link to={PATHNAMES.ORDERS + '/' + PATHNAMES.PENDING}>Ver pedidos por preparar</Link>
 		</li>
 		<li>
-			<button onClick={() => navigate(PATHNAMES.ORDERS + '/' + PATHNAMES.DELIVERING)}>Ver pedidos por entregar</button>
+			<Link to={PATHNAMES.ORDERS + '/' + PATHNAMES.DELIVERING}>Ver pedidos por entregar</Link>
 		</li>
 		<li>
-			<button onClick={() => navigate(PATHNAMES.ORDERS + '/' + PATHNAMES.DELIVERED)}>Ver pedidos por entreados</button>
+			<Link to={PATHNAMES.ORDERS + '/' + PATHNAMES.DELIVERED}>Ver pedidos por entregados</Link>
 		</li>
 	</ul >;
 }

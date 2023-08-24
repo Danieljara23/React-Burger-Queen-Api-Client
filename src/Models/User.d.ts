@@ -1,4 +1,8 @@
-import { ROLES } from "./Order";
+export enum ROLES {
+	admin = 'admin',
+	waiter = 'waiter',
+	chef = 'chef'
+};
 
 export interface ICurrentUser {
 	token: string;

@@ -14,7 +14,7 @@ header nav {
 header ul {
     list-style-type: none;
 	padding-inline-start: 0;
-	margin-top: 16px;
+	margin-top: 4px;
 }
 
 header a[href] {
