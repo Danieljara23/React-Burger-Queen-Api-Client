@@ -24,12 +24,10 @@ function AddProduct({addProductHandler}:AddProductProps) {
     const form = e.target;
     // @ts-ignore
     const formData = new FormData(form);
-    console.log({formData})
     const formJson = Object.fromEntries(formData.entries());
-    console.log(formJson);
     const productObject:IProduct = {
       id: 0,
-      image: "https://picsum.photos/536/354",
+      image: String(formJson.image_url),
       dateEntry: String(new Date().toLocaleString),
       name: String(formJson.name),
       price: Number(formJson.price),
@@ -60,8 +58,12 @@ function AddProduct({addProductHandler}:AddProductProps) {
               <option value={PRODUCT_TYPE.breakfast}>{PRODUCT_TYPE.breakfast}</option>
               <option value={PRODUCT_TYPE.lunch}>{PRODUCT_TYPE.lunch}</option>
             </select>
+
+            <label htmlFor="image_url">URL de imagen del producto</label>
+            <input type="text" name="image_url" />
+
             <button type="reset">Reset form</button>
-            <button type="submit">Submit form</button>
+            <button className="btn-red"  type="submit">Submit form</button>
           </form>
         </div>
       )}

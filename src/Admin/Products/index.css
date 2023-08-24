@@ -1,11 +1,32 @@
 :root {
   --red-300-: #ff6767;
   --yellow-400-: #ffcc00;
+  --gray-500: #9E9E9E;
+  --gray-300: #E0E0E0;
   --white-: #ffffff;
+}
+
+h2 {
+  text-align: center;
 }
 
 .btn {
   width: 250px;
+}
+
+button[type="submit"] {
+  background-color: var(--red-300-);
+  color: var(--white-);
+}
+
+button[type="reset"] {
+  margin-top: 30px;
+  border: 1px solid var(--gray-500);
+  background-color: var(--white-);
+}
+
+button[type="reset"]:hover {
+  border: 1px solid var(--gray-500);
 }
 
 .btn-red {
@@ -25,6 +46,12 @@
   display: flex;
   flex-direction: row;
   width: 100%;
+  align-items: center;
+  height: 62px;
+}
+
+.table-body-row:nth-child(2n + 1) {
+  background-color: #f2f2f2;
 }
 
 .table-header {
@@ -45,31 +72,27 @@
 
 .table-body-row button {
   width: 100px;
-  border: 1px solid var(--yellow-400-);
-  background-color: var(--yellow-400-);
+  color: var(--gray-500);
+  border: 1px solid var(--gray-300);
+  background-color: var(--white-);
   height: 40px;
 }
 
+.table-body-row button:disabled {
+  background-color: var(--gray-300);
+}
+
 .table-body-row button:hover {
-  color: var(--yellow-400-);
-  border: 1px solid var(--yellow-400-);
-  background-color: var(--white-);
+  border: 1px solid var(--gray-300);
 }
 
-.table-body-row button:nth-child(2) {
-  color: var(--white-);
-  border: 1px solid var(--red-300-);
-  background-color: var(--red-300-);
+.product-image {
+  width: 50px;
+  height: 50px;
 }
-
-.table-body-row button:nth-child(2):hover {
-  color: var(--red-300-);
-  background-color: var(--white-);
-}
-
 
 .add-product-container {
-  padding: 0 20px;
+  padding: 0 36px;
   display: flex;
   justify-content: flex-end;
   position: relative;
@@ -78,7 +101,7 @@
 .modal-container {
   position: absolute;
   width: 600px;
-  height: 600px;
+  height: 470px;
   border-radius: 10px;
   right: calc(100% - 50% - 300px);
   background-color: white;

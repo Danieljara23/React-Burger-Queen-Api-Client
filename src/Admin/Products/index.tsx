@@ -38,6 +38,7 @@ const ProductsAdmin = () => {
           <div className="table-header-item">Nombre del producto</div>
           <div className="table-header-item">Categoría</div>
           <div className="table-header-item">Precio</div>
+          <div className="table-header-item">Imagen</div>
           <div className="table-header-item">Acciones</div>
         </div>
         <div className="table-body">

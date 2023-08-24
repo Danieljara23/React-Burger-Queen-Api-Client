@@ -20,8 +20,11 @@ function AdminProductList({products}: AdminProductProps) {
               <p>${product.price}</p>
             </div>
             <div>
-              <button>Edit</button>
-              <button>Delete</button>
+              <img className="product-image" src={product.image} alt={product.name} />
+            </div>
+            <div>
+              <button disabled>Edit</button>
+              <button disabled>Delete</button>
             </div>
           </div>
         );
