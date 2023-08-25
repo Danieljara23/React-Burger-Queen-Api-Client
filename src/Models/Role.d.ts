@@ -1,5 +1,5 @@
 export enum ROLES {
-	admin = 'admin',
-	waiter = 'waiter',
-	chef = 'chef'
-};
+  admin = "admin",
+  waiter = "waiter",
+  chef = "chef",
+}

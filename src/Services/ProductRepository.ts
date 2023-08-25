@@ -3,14 +3,14 @@ import { host, jsonFetch } from "./CommonService";
 
 /**
  * Get one user info by id
- * @param id 
+ * @param id
  * @returns Promise<token>
  */
 export function getProducts(): Promise<IProduct[]> {
-    const url = host + "/products";
+  const url = host + "/products";
 
-    return jsonFetch({
-        url,
-        method: "GET"
-    });
+  return jsonFetch({
+    url,
+    method: "GET",
+  });
 }
