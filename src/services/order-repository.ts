@@ -1,5 +1,5 @@
-import { IOrder } from "../Models/Order";
-import { host, jsonFetch } from "./CommonService";
+import { IOrder } from "../models/order";
+import { host, jsonFetch } from "./common-service";
 
 /**
  * Creates a new order

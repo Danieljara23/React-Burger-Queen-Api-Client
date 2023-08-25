@@ -1,11 +1,11 @@
 import { useState } from "react";
-import { IUser } from "../../Models/User.d";
-import { ILoginResponse } from "../../Models/Response.d";
-import { createSession, login } from "../../Services/TokenRepository";
+import { IUser } from "../../models/user";
+import { ILoginResponse } from "../../models/response";
+import { createSession, login } from "../../services/token-repository";
 import burgerImg from "../../assets/burger.jpg";
-import "./LoginForm.css";
+import "./login-form.css";
 import { useNavigate } from "react-router-dom";
-import { PATHNAMES } from "../../Services/RouteService";
+import { PATHNAMES } from "../../services/route-service";
 
 const LoginForm: React.FC = () => {
   const navigate = useNavigate();

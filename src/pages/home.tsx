@@ -1,4 +1,4 @@
-import Dashboard from "../Components/Dashboard/Dashboard";
+import Dashboard from "../Components/dashboard/dashboard";
 
 const Home: React.FC = () => {
   return <Dashboard />;

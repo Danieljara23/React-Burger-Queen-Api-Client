@@ -1,8 +1,8 @@
 import { render } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import CreateOrder from "../Components/CreateOrder/CreateOrder";
-import { IOrder, ORDER_STATUS } from "../Models/Order.d";
-import { PRODUCT_TYPE } from "../Models/Product.d";
+import CreateOrder from "../Components/create-order/create-order";
+import { IOrder, ORDER_STATUS } from "../models/order";
+import { PRODUCT_TYPE } from "../models/product";
 
 describe("<CreateOrder />", () => {
   const anyFunction = () => {

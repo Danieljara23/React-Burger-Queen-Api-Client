@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
-import NavBar from "../Components/NavBar/NavBar";
-import { getSession } from "../Services/TokenRepository";
+import NavBar from "../Components/nav-bar/nav-bar";
+import { getSession } from "../services/token-repository";
 
 const Layout: React.FC = () => {
   const { user } = getSession();

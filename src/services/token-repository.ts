@@ -1,6 +1,6 @@
-import { IUser } from "../Models/User.d";
-import { ILoginResponse } from "../Models/Response.d";
-import { host, jsonFetch } from "./CommonService";
+import { IUser } from "../models/user";
+import { ILoginResponse } from "../models/response";
+import { host, jsonFetch } from "./common-service";
 
 const tokenKey = "token";
 const tokenUserId = "userId";

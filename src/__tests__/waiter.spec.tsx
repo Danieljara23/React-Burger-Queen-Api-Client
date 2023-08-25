@@ -1,11 +1,11 @@
-import * as ProductRepository from "../Services/ProductRepository";
-import * as OrderRepository from "../Services/OrderRepository";
+import * as ProductRepository from "../services/product-repository";
+import * as OrderRepository from "../services/order-repository";
 import userEvent from "@testing-library/user-event";
 import { render } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import { IOrder, ORDER_STATUS } from "../Models/Order.d";
-import { PRODUCT_TYPE } from "../Models/Product.d";
-import Waiter from "../Pages/Waiter";
+import { IOrder, ORDER_STATUS } from "../models/order";
+import { PRODUCT_TYPE } from "../models/product";
+import Waiter from "../pages/waiter";
 import React from "react";
 
 describe("<Waiter />", () => {

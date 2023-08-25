@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
-import { ROLES } from "../../Models/Role.d";
-import { getSession } from "../../Services/TokenRepository";
-import "./Dashboard.css";
-import { PATHNAMES } from "../../Services/RouteService";
+import { ROLES } from "../../models/role.d";
+import { getSession } from "../../services/token-repository";
+import "./dashboard.css";
+import { PATHNAMES } from "../../services/route-service";
 
 const Dashboard: React.FC = () => {
   const { user } = getSession();

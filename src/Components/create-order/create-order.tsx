@@ -1,7 +1,7 @@
-import { IOrder, IOrderProduct } from "../../Models/Order.d";
-import { IProduct } from "../../Models/Product.d";
-import OrderProductList from "../OrderProductList/OrderProductList";
-import "./CreateOrder.css";
+import { IOrder, IOrderProduct } from "../../models/order";
+import { IProduct } from "../../models/product";
+import OrderProductList from "../order-product-list/order-product-list";
+import "./create-order.css";
 
 interface CreateOrderProps {
   order: IOrder;

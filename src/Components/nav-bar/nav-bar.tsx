@@ -1,4 +1,4 @@
-import { IUser } from "../../Models/User.d";
+import { IUser } from "../../models/user";
 
 interface NavBarProps {
   onLogout: () => void;

@@ -1,5 +1,5 @@
-import { IProduct } from "../Models/Product.d";
-import { host, jsonFetch } from "./CommonService";
+import { IProduct } from "../models/product";
+import { host, jsonFetch } from "./common-service";
 
 /**
  * Get one user info by id

@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import { getProducts } from "../Services/ProductRepository";
-import { PRODUCT_TYPE, IProduct } from "../Models/Product.d";
-import { IOrder, IOrderProduct, ORDER_STATUS } from "../Models/Order.d";
-import ProductList from "../Components/ProductList/ProductList";
-import "./Waiter.css";
-import CreateOrder from "../Components/CreateOrder/CreateOrder";
-import { getSession } from "../Services/TokenRepository";
-import { createOrder } from "../Services/OrderRepository";
+import { getProducts } from "../services/product-repository";
+import { PRODUCT_TYPE, IProduct } from "../models/product.d";
+import { IOrder, IOrderProduct, ORDER_STATUS } from "../models/order.d";
+import ProductList from "../Components/product-list/product-list";
+import "./waiter.css";
+import CreateOrder from "../Components/create-order/create-order";
+import { getSession } from "../services/token-repository";
+import { createOrder } from "../services/order-repository";
 
 const ADD_PRODUCT = true;
 const REMOVE_PRODUCT = false;

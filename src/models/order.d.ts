@@ -1,4 +1,4 @@
-import { IProduct } from "./Product";
+import { IProduct } from "./product";
 
 export enum ORDER_STATUS {
   pending = "pending",
