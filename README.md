@@ -9,10 +9,10 @@
 ## Estructura de archivos
 
 - `src/assets`: directorio para imágenes.
-- `src/Components`: directorio para componentes React.
-- `src/Models`: directorio para interfaces TypeScript.
-- `src/Routes`: directorio para componentes relacionados con rutas.
-- `src/Services`: directorio para las funciones que interactuán con la API Rest y `localstorage`.
+- `src/components`: directorio para componentes React.
+- `src/models`: directorio para interfaces TypeScript.
+- `src/routes`: directorio para componentes relacionados con rutas.
+- `src/services`: directorio para las funciones que interactuán con la API Rest y `localstorage`.
 
 ## Rutas
 
@@ -29,4 +29,4 @@ Se definirán las siguientes rutas:
 
 ### Protección de rutas
 
-Para proteger las rutas creamos un componente [ProtectedRoute](src\Routes\ProtectedRoute.tsx)
+Para proteger las rutas creamos un componente [ProtectedRoute](src\routes\protected-route.tsx)
