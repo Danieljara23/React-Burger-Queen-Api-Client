@@ -1,16 +1,15 @@
 import { render } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import CreateOrder from "../Components/create-order/create-order";
-import { IOrder, ORDER_STATUS } from "../models/order";
-import { PRODUCT_TYPE } from "../models/product";
+import { Order } from "../models/order";
 
 describe("<CreateOrder />", () => {
   const anyFunction = () => {
     console.log("anyFunction called");
   };
-  const order: IOrder = {
+  const order: Order = {
     userId: 0,
-    status: ORDER_STATUS.pending,
+    status: "pending",
     dateEntry: "2020-01-01",
     client: "client name",
     products: [
@@ -20,7 +19,7 @@ describe("<CreateOrder />", () => {
           name: "fries",
           price: 500,
           image: "",
-          type: PRODUCT_TYPE.lunch,
+          type: "lunch",
           dateEntry: "",
         },
         qty: 3,

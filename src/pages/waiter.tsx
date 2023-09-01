@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { getProducts } from "../services/product-repository";
-import { PRODUCT_TYPE, IProduct } from "../models/product.d";
-import { IOrder, IOrderProduct, ORDER_STATUS } from "../models/order.d";
+import { PRODUCT_TYPE, Product } from "../models/product.d";
+import { Order, OrderProduct } from "../models/order.d";
 import ProductList from "../Components/product-list/product-list";
 import "./waiter.css";
 import CreateOrder from "../Components/create-order/create-order";
@@ -13,35 +13,37 @@ const REMOVE_PRODUCT = false;
 
 const Waiter: React.FC = () => {
   const { userId } = getSession();
-  const [products, setProducts] = useState<IProduct[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
   const [orderMsg, setOrderMsg] = useState<string>("");
-  const [activeTab, setActiveTab] = useState(PRODUCT_TYPE.breakfast);
-  const initialOrder: IOrder = {
+  const [activeTab, setActiveTab] = useState<PRODUCT_TYPE>("Desayuno");
+  const initialOrder: Order = {
     client: "",
     products: [],
     userId: userId,
-    status: ORDER_STATUS.pending,
+    status: "pending",
     dateEntry: "",
   };
-  const [order, setOrder] = useState<IOrder>(initialOrder);
+  const [order, setOrder] = useState<Order>(initialOrder);
   const tabButtonClass = (prodType: PRODUCT_TYPE) =>
     activeTab === prodType ? "" : "pseudo";
-  const onSetOrder = (newOrder: IOrder) => {
+  const onSetOrder = (newOrder: Order) => {
     setOrderMsg("");
     setOrder(newOrder);
   };
   const handleChangeCustomer = (e: React.ChangeEvent<HTMLInputElement>) =>
     onSetOrder({ ...order, client: e.target.value });
-  const handleSubmitCreateOrder = (e: React.ChangeEvent<HTMLFormElement>) => {
+  const handleSubmitCreateOrder = async (
+    e: React.ChangeEvent<HTMLFormElement>,
+  ) => {
     e.preventDefault();
-    createOrder(order)
-      .then(() => {
-        onSetOrder(initialOrder);
-        setOrderMsg("Your order has been created");
-      })
-      .catch(() => {
-        setOrderMsg("Something went wrong creating your order");
-      });
+    let newMsg = "Your order has been created";
+    try {
+      createOrder(order);
+      onSetOrder(initialOrder);
+    } catch (error) {
+      newMsg = "Something went wrong creating your order";
+    }
+    setOrderMsg(newMsg);
   };
 
   /**
@@ -49,13 +51,13 @@ const Waiter: React.FC = () => {
    * @param add
    * @param productToModify
    */
-  const modifyProductList = (add: boolean, productToModify: IProduct) => {
+  const modifyProductList = (add: boolean, productToModify: Product) => {
     const modifier = add ? 1 : -1;
     const alreadyInList = order.products.find(
-      (orderProduct: IOrderProduct) =>
+      (orderProduct: OrderProduct) =>
         orderProduct.product.id === productToModify.id,
     );
-    const mappedList = order.products.map((orderProduct: IOrderProduct) => {
+    const mappedList = order.products.map((orderProduct: OrderProduct) => {
       const isThis = orderProduct.product.id === productToModify.id;
 
       return {
@@ -74,15 +76,13 @@ const Waiter: React.FC = () => {
       products: newList.filter(({ qty }) => qty > 0),
     });
   };
-  const handleAddProduct = (product: IProduct) =>
+  const handleAddProduct = (product: Product) =>
     modifyProductList(ADD_PRODUCT, product);
-  const handleRemoveProduct = (product: IProduct) =>
+  const handleRemoveProduct = (product: Product) =>
     modifyProductList(REMOVE_PRODUCT, product);
-
+  const getAllProducts = async () => setProducts(await getProducts());
   useEffect(() => {
-    getProducts().then((newProducts) => {
-      setProducts(newProducts);
-    });
+    getAllProducts();
   }, []);
 
   return (
@@ -93,21 +93,21 @@ const Waiter: React.FC = () => {
           <h2>Products</h2>
           <div>
             <button
-              className={tabButtonClass(PRODUCT_TYPE.breakfast)}
-              onClick={() => setActiveTab(PRODUCT_TYPE.breakfast)}
+              className={tabButtonClass("Desayuno")}
+              onClick={() => setActiveTab("Desayuno")}
             >
               Breakfast
             </button>
             <button
-              className={tabButtonClass(PRODUCT_TYPE.lunch)}
-              onClick={() => setActiveTab(PRODUCT_TYPE.lunch)}
+              className={tabButtonClass("Almuerzo")}
+              onClick={() => setActiveTab("Almuerzo")}
             >
               Lunch
             </button>
           </div>
           <ProductList
             products={products.filter(
-              (product: IProduct) => product.type === activeTab,
+              (product: Product) => product.type === activeTab,
             )}
             onAddProduct={handleAddProduct}
           />

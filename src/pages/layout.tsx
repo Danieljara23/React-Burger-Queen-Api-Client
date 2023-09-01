@@ -1,12 +1,14 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import NavBar from "../Components/nav-bar/nav-bar";
-import { getSession } from "../services/token-repository";
+import { deleteSession, getSession } from "../services/token-repository";
+import { PATHNAMES } from "../services/route-service";
 
 const Layout: React.FC = () => {
   const { user } = getSession();
-
+  const navigate = useNavigate();
   const onLogout = () => {
-    console.log("Logout");
+    deleteSession();
+    navigate(PATHNAMES.LOGIN);
   };
 
   return (

@@ -1,13 +1,10 @@
-export enum PRODUCT_TYPE {
-  breakfast = "Desayuno",
-  lunch = "Almuerzo",
-}
+export type PRODUCT_TYPE = "Desayuno" | "Almuerzo";
 
-export interface IProduct {
+export type Product = {
   id: number;
   name: string;
   price: number;
   image: string;
   type: PRODUCT_TYPE;
   dateEntry: string;
-}
+};

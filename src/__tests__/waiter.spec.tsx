@@ -3,8 +3,7 @@ import * as OrderRepository from "../services/order-repository";
 import userEvent from "@testing-library/user-event";
 import { render } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import { IOrder, ORDER_STATUS } from "../models/order";
-import { PRODUCT_TYPE } from "../models/product";
+import { Order } from "../models/order";
 import Waiter from "../pages/waiter";
 import React from "react";
 
@@ -20,10 +19,10 @@ describe("<Waiter />", () => {
     jest
       .spyOn(OrderRepository, "createOrder")
       .mockImplementation(() => Promise.resolve(true));
-    const initialOrder: IOrder = {
+    const initialOrder: Order = {
       client: "Kvn",
       userId: 123,
-      status: ORDER_STATUS.pending,
+      status: "pending",
       dateEntry: "",
       products: [
         {
@@ -32,7 +31,7 @@ describe("<Waiter />", () => {
             name: "fries",
             price: 500,
             image: "",
-            type: PRODUCT_TYPE.lunch,
+            type: "lunch",
             dateEntry: "",
           },
           qty: 3,
@@ -44,7 +43,7 @@ describe("<Waiter />", () => {
       .fn()
       .mockReturnValueOnce([[], anyFunction])
       .mockReturnValueOnce(["", setOrderMsg])
-      .mockReturnValueOnce([PRODUCT_TYPE.breakfast, anyFunction])
+      .mockReturnValueOnce(["breakfast", anyFunction])
       .mockReturnValueOnce([initialOrder, anyFunction]);
 
     const { container } = render(<Waiter />);

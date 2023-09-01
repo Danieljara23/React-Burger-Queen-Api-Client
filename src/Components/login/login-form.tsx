@@ -1,7 +1,5 @@
 import { useState } from "react";
-import { IUser } from "../../models/user";
-import { ILoginResponse } from "../../models/response";
-import { createSession, login } from "../../services/token-repository";
+import { login } from "../../services/token-repository";
 import burgerImg from "../../assets/burger.jpg";
 import "./login-form.css";
 import { useNavigate } from "react-router-dom";
@@ -27,21 +25,17 @@ const LoginForm: React.FC = () => {
   const handleChangePassword = (e: React.ChangeEvent<HTMLInputElement>) =>
     setFormData({ ...formData, password: e.target.value });
 
-  const handleSession = (token: string, user: IUser) => {
-    createSession(token, user);
-    navigate(PATHNAMES.HOME);
-  };
-
-  const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
     setMessage("");
     setLoginLoading(true);
-    login(formData.email, formData.password)
-      .then((res: ILoginResponse) => {
-        handleSession(res.accessToken, res.user);
-      })
-      .catch(setMessage)
-      .finally(() => setLoginLoading(false));
+    try {
+      await login(formData.email, formData.password);
+      navigate(PATHNAMES.HOME);
+    } catch (error) {
+      setMessage((error as Error).message);
+    }
+    setLoginLoading(false);
   };
 
   return (
@@ -69,21 +63,11 @@ const LoginForm: React.FC = () => {
             onChange={handleChangePassword}
           />
           <br />
-          {loginLoading && (
-            <>
-              <span>Loading...</span>
-              <br />
-            </>
-          )}
-          {message && (
-            <>
-              <span>{message}</span>
-              <br />
-            </>
-          )}
           <button type="submit" disabled={loginLoading}>
             Login
           </button>
+          {loginLoading && <div>Loading...</div>}
+          {message && <div>{message}</div>}
         </form>
       </section>
     </>
