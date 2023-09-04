@@ -1,9 +1,9 @@
 import { Product } from "../../models/product";
-import { Order, OrderProduct } from "../../models/order";
+import { NewOrder, OrderProduct } from "../../models/order";
 import "./order-product-list.css";
 
 type OrderProductListProps = {
-  order: Order;
+  order: NewOrder;
   addProduct: (product: Product) => void;
   removeProduct: (product: Product) => void;
 };

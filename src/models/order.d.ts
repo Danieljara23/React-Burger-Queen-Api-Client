@@ -10,6 +10,12 @@ export type Order = {
   products: OrderProduct[];
 };
 
+export type NewOrder = {
+  status: ORDER_STATUS;
+  client: string;
+  products: OrderProduct[];
+};
+
 export type OrderProduct = {
   product: IProduct;
   qty: number;

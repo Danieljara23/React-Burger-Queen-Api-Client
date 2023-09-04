@@ -1,44 +1,41 @@
 import { useEffect, useState } from "react";
 import { getProducts } from "../services/product-repository";
 import { PRODUCT_TYPE, Product } from "../models/product.d";
-import { Order, OrderProduct } from "../models/order.d";
+import { NewOrder, OrderProduct } from "../models/order.d";
 import ProductList from "../Components/product-list/product-list";
 import "./waiter.css";
 import CreateOrder from "../Components/create-order/create-order";
-import { getSession } from "../services/token-repository";
 import { createOrder } from "../services/order-repository";
 
 const ADD_PRODUCT = true;
 const REMOVE_PRODUCT = false;
 
+const initialOrder: NewOrder = {
+  client: "",
+  products: [],
+  status: "pending"
+};
+
 const Waiter: React.FC = () => {
-  const { userId } = getSession();
   const [products, setProducts] = useState<Product[]>([]);
   const [orderMsg, setOrderMsg] = useState<string>("");
   const [activeTab, setActiveTab] = useState<PRODUCT_TYPE>("Desayuno");
-  const initialOrder: Order = {
-    client: "",
-    products: [],
-    userId: userId,
-    status: "pending",
-    dateEntry: "",
-  };
-  const [order, setOrder] = useState<Order>(initialOrder);
+  const [newOrder, setNewOrder] = useState<NewOrder>(initialOrder);
   const tabButtonClass = (prodType: PRODUCT_TYPE) =>
     activeTab === prodType ? "" : "pseudo";
-  const onSetOrder = (newOrder: Order) => {
+  const onSetOrder = (newOrder: NewOrder) => {
     setOrderMsg("");
-    setOrder(newOrder);
+    setNewOrder(newOrder);
   };
   const handleChangeCustomer = (e: React.ChangeEvent<HTMLInputElement>) =>
-    onSetOrder({ ...order, client: e.target.value });
+    onSetOrder({ ...newOrder, client: e.target.value });
   const handleSubmitCreateOrder = async (
     e: React.ChangeEvent<HTMLFormElement>,
   ) => {
     e.preventDefault();
     let newMsg = "Your order has been created";
     try {
-      createOrder(order);
+      createOrder(newOrder);
       onSetOrder(initialOrder);
     } catch (error) {
       newMsg = "Something went wrong creating your order";
@@ -53,11 +50,11 @@ const Waiter: React.FC = () => {
    */
   const modifyProductList = (add: boolean, productToModify: Product) => {
     const modifier = add ? 1 : -1;
-    const alreadyInList = order.products.find(
+    const alreadyInList = newOrder.products.find(
       (orderProduct: OrderProduct) =>
         orderProduct.product.id === productToModify.id,
     );
-    const mappedList = order.products.map((orderProduct: OrderProduct) => {
+    const mappedList = newOrder.products.map((orderProduct: OrderProduct) => {
       const isThis = orderProduct.product.id === productToModify.id;
 
       return {
@@ -69,10 +66,10 @@ const Waiter: React.FC = () => {
       product: productToModify,
       qty: modifier,
     };
-    const newList = alreadyInList ? mappedList : [...order.products, thisProd];
+    const newList = alreadyInList ? mappedList : [...newOrder.products, thisProd];
 
     onSetOrder({
-      ...order,
+      ...newOrder,
       products: newList.filter(({ qty }) => qty > 0),
     });
   };
@@ -114,7 +111,7 @@ const Waiter: React.FC = () => {
         </section>
         <section>
           <CreateOrder
-            order={order}
+            order={newOrder}
             onRemoveProduct={handleRemoveProduct}
             onAddProduct={handleAddProduct}
             onChangeCustomer={handleChangeCustomer}

@@ -1,10 +1,10 @@
-import { Order, OrderProduct } from "../../models/order";
+import { NewOrder, OrderProduct } from "../../models/order";
 import { Product } from "../../models/product";
 import OrderProductList from "../order-product-list/order-product-list";
 import "./create-order.css";
 
 type CreateOrderProps = {
-  order: Order;
+  order: NewOrder;
   onAddProduct: (product: Product) => void;
   onRemoveProduct: (product: Product) => void;
   onChangeCustomer: (e: React.ChangeEvent<HTMLInputElement>) => void;
