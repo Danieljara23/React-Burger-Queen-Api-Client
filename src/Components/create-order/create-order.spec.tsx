@@ -1,7 +1,7 @@
 import { render } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import CreateOrder from "../Components/create-order/create-order";
-import { Order } from "../models/order";
+import CreateOrder from "./create-order";
+import { Order } from "../../models/order";
 
 describe("<CreateOrder />", () => {
   const anyFunction = () => {

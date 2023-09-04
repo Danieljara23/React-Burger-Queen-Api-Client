@@ -49,6 +49,9 @@
 		"testEnvironment": "jsdom",
 		"moduleNameMapper": {
 			"\\.(css|png)$": "<rootDir>/__mocks__/styleMock.js"
-		}
+		},
+		"testMatch": [
+			"**/*.spec.tsx"
+		]
 	}
 }

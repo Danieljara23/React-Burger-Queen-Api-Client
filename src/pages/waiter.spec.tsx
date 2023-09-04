@@ -4,13 +4,11 @@ import userEvent from "@testing-library/user-event";
 import { render } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { Order } from "../models/order";
-import Waiter from "../pages/waiter";
+import Waiter from "./waiter";
 import React from "react";
 
 describe("<Waiter />", () => {
-  const anyFunction = () => {
-    console.log("anyFunction called");
-  };
+  const anyFunction = () => {};
 
   test("Should make request with correct params on submit the order", async () => {
     jest
