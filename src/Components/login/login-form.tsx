@@ -4,9 +4,11 @@ import burgerImg from "../../assets/burger.jpg";
 import "./login-form.css";
 import { useNavigate } from "react-router-dom";
 import { PATHNAMES } from "../../services/route-service";
+import { LoadingMessageHook } from "../../Hooks/loading-message-hook";
 
 const LoginForm: React.FC = () => {
   const navigate = useNavigate();
+  const { loading, message, setLoading, setMessage } = LoadingMessageHook();
 
   const initialFormState = {
     email: "",
@@ -15,27 +17,26 @@ const LoginForm: React.FC = () => {
 
   const [formData, setFormData] = useState(initialFormState);
 
-  const [loginLoading, setLoginLoading] = useState(false);
-
-  const [message, setMessage] = useState("");
-
-  const handleChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) =>
+  const handleChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setMessage("");
     setFormData({ ...formData, email: e.target.value });
+  };
 
-  const handleChangePassword = (e: React.ChangeEvent<HTMLInputElement>) =>
+  const handleChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setMessage("");
     setFormData({ ...formData, password: e.target.value });
+  };
 
   const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setMessage("");
-    setLoginLoading(true);
+    setLoading(true);
     try {
       await login(formData.email, formData.password);
       navigate(PATHNAMES.HOME);
     } catch (error) {
       setMessage((error as Error).message);
     }
-    setLoginLoading(false);
+    setLoading(false);
   };
 
   return (
@@ -48,7 +49,7 @@ const LoginForm: React.FC = () => {
             required
             type="email"
             placeholder="email"
-            disabled={loginLoading}
+            disabled={loading}
             value={formData.email}
             onChange={handleChangeEmail}
           />
@@ -58,16 +59,15 @@ const LoginForm: React.FC = () => {
             required
             type="password"
             placeholder="password"
-            disabled={loginLoading}
+            disabled={loading}
             value={formData.password}
             onChange={handleChangePassword}
           />
           <br />
-          <button type="submit" disabled={loginLoading}>
+          <button type="submit" disabled={loading}>
             Login
           </button>
-          {loginLoading && <div>Loading...</div>}
-          {message && <div>{message}</div>}
+          {message && <div aria-live="polite">{message}</div>}
         </form>
       </section>
     </>

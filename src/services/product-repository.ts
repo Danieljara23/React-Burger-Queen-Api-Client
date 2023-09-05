@@ -7,7 +7,7 @@ import { getSession } from "./token-repository";
  * @param id
  * @returns Promise<token>
  */
-export function getProducts(): Promise<Product[]> {
+export const getProducts = (): Promise<Product[]> => {
   const { token } = getSession();
   const url = host + "/products";
 
@@ -18,4 +18,4 @@ export function getProducts(): Promise<Product[]> {
       Authorization: `Bearer ${token}`,
     },
   });
-}
+};

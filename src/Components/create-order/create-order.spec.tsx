@@ -36,6 +36,7 @@ describe("<CreateOrder />", () => {
         onAddProduct={anyFunction}
         onChangeCustomer={anyFunction}
         onSubmit={anyFunction}
+        loading={false}
       />,
     );
     const totalElement = container.getElementsByClassName(
@@ -57,6 +58,7 @@ describe("<CreateOrder />", () => {
         onAddProduct={anyFunction}
         onChangeCustomer={anyFunction}
         onSubmit={anyFunction}
+        loading={false}
       />,
     );
     const submitButton = container.querySelector(
@@ -79,6 +81,7 @@ describe("<CreateOrder />", () => {
         onAddProduct={anyFunction}
         onChangeCustomer={anyFunction}
         onSubmit={anyFunction}
+        loading={false}
       />,
     );
     const submitButton = container.querySelector(
@@ -97,6 +100,7 @@ describe("<CreateOrder />", () => {
         onAddProduct={anyFunction}
         onChangeCustomer={anyFunction}
         onSubmit={anyFunction}
+        loading={false}
       />,
     );
     const submitButton = container.querySelector(

@@ -6,6 +6,7 @@ import ProductList from "../Components/product-list/product-list";
 import "./waiter.css";
 import CreateOrder from "../Components/create-order/create-order";
 import { createOrder } from "../services/order-repository";
+import { LoadingMessageHook } from "../Hooks/loading-message-hook";
 
 const ADD_PRODUCT = true;
 const REMOVE_PRODUCT = false;
@@ -13,18 +14,19 @@ const REMOVE_PRODUCT = false;
 const initialOrder: NewOrder = {
   client: "",
   products: [],
-  status: "pending"
+  status: "pending",
 };
 
 const Waiter: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
-  const [orderMsg, setOrderMsg] = useState<string>("");
   const [activeTab, setActiveTab] = useState<PRODUCT_TYPE>("Desayuno");
   const [newOrder, setNewOrder] = useState<NewOrder>(initialOrder);
+  const { loading, message, setLoading, setMessage, setLoadingAndMessage } =
+    LoadingMessageHook();
   const tabButtonClass = (prodType: PRODUCT_TYPE) =>
     activeTab === prodType ? "" : "pseudo";
   const onSetOrder = (newOrder: NewOrder) => {
-    setOrderMsg("");
+    setMessage("");
     setNewOrder(newOrder);
   };
   const handleChangeCustomer = (e: React.ChangeEvent<HTMLInputElement>) =>
@@ -34,13 +36,14 @@ const Waiter: React.FC = () => {
   ) => {
     e.preventDefault();
     let newMsg = "Your order has been created";
+    setLoading(true);
     try {
-      createOrder(newOrder);
+      await createOrder(newOrder);
       onSetOrder(initialOrder);
     } catch (error) {
       newMsg = "Something went wrong creating your order";
     }
-    setOrderMsg(newMsg);
+    setLoadingAndMessage(false, newMsg);
   };
 
   /**
@@ -66,7 +69,9 @@ const Waiter: React.FC = () => {
       product: productToModify,
       qty: modifier,
     };
-    const newList = alreadyInList ? mappedList : [...newOrder.products, thisProd];
+    const newList = alreadyInList
+      ? mappedList
+      : [...newOrder.products, thisProd];
 
     onSetOrder({
       ...newOrder,
@@ -78,7 +83,7 @@ const Waiter: React.FC = () => {
   const handleRemoveProduct = (product: Product) =>
     modifyProductList(REMOVE_PRODUCT, product);
   const getAllProducts = async () => setProducts(await getProducts());
-  useEffect(() => {
+    useEffect(() => {
     getAllProducts();
   }, []);
 
@@ -116,7 +121,8 @@ const Waiter: React.FC = () => {
             onAddProduct={handleAddProduct}
             onChangeCustomer={handleChangeCustomer}
             onSubmit={handleSubmitCreateOrder}
-            orderMsg={orderMsg}
+            orderMsg={message}
+            loading={loading}
           />
         </section>
       </div>

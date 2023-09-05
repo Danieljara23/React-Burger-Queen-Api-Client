@@ -10,11 +10,13 @@ type CreateOrderProps = {
   onChangeCustomer: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onSubmit: (e: React.ChangeEvent<HTMLFormElement>) => void;
   orderMsg: string;
+  loading: boolean;
 };
 
 const CreateOrder: React.FC<CreateOrderProps> = ({
   order,
   orderMsg,
+  loading,
   onRemoveProduct,
   onAddProduct,
   onChangeCustomer,
@@ -46,9 +48,12 @@ const CreateOrder: React.FC<CreateOrderProps> = ({
           id="costumer-name"
           value={order.client}
           onChange={onChangeCustomer}
+          disabled={loading}
         />
         <button
-          disabled={order.client === "" || order.products.length === 0}
+          disabled={
+            order.client === "" || order.products.length === 0 || loading
+          }
           type="submit"
         >
           Create new order
