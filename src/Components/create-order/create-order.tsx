@@ -1,20 +1,22 @@
-import { IOrder, IOrderProduct } from "../../models/order";
-import { IProduct } from "../../models/product";
+import { NewOrder, OrderProduct } from "../../models/order";
+import { Product } from "../../models/product";
 import OrderProductList from "../order-product-list/order-product-list";
 import "./create-order.css";
 
-interface CreateOrderProps {
-  order: IOrder;
-  onAddProduct: (product: IProduct) => void;
-  onRemoveProduct: (product: IProduct) => void;
+type CreateOrderProps = {
+  order: NewOrder;
+  onAddProduct: (product: Product) => void;
+  onRemoveProduct: (product: Product) => void;
   onChangeCustomer: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onSubmit: (e: React.ChangeEvent<HTMLFormElement>) => void;
   orderMsg: string;
-}
+  loading: boolean;
+};
 
 const CreateOrder: React.FC<CreateOrderProps> = ({
   order,
   orderMsg,
+  loading,
   onRemoveProduct,
   onAddProduct,
   onChangeCustomer,
@@ -32,7 +34,7 @@ const CreateOrder: React.FC<CreateOrderProps> = ({
         {" "}
         Total cost: $
         {order.products.reduce(
-          (memo: number, item: IOrderProduct) =>
+          (memo: number, item: OrderProduct) =>
             item.product.price * item.qty + memo,
           0,
         )}
@@ -46,9 +48,12 @@ const CreateOrder: React.FC<CreateOrderProps> = ({
           id="costumer-name"
           value={order.client}
           onChange={onChangeCustomer}
+          disabled={loading}
         />
         <button
-          disabled={order.client === "" || order.products.length === 0}
+          disabled={
+            order.client === "" || order.products.length === 0 || loading
+          }
           type="submit"
         >
           Create new order

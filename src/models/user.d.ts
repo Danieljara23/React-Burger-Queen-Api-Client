@@ -1,17 +1,13 @@
-export enum ROLES {
-  admin = "admin",
-  waiter = "waiter",
-  chef = "chef",
-}
+export type ROLES = "admin" | "waiter" | "chef";
 
-export interface ICurrentUser {
+export type CurrentUser = {
   token: string;
   user: IUser;
-}
+};
 
-export interface IUser {
+export type User = {
   id: number;
   email: string;
   role: ROLES;
   password: string;
-}
+};

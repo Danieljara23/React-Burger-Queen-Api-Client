@@ -1,17 +1,14 @@
 import { render } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import CreateOrder from "../Components/create-order/create-order";
-import { IOrder, ORDER_STATUS } from "../models/order";
-import { PRODUCT_TYPE } from "../models/product";
+import CreateOrder from "./create-order";
+import { NewOrder } from "../../models/order";
 
 describe("<CreateOrder />", () => {
   const anyFunction = () => {
     console.log("anyFunction called");
   };
-  const order: IOrder = {
-    userId: 0,
-    status: ORDER_STATUS.pending,
-    dateEntry: "2020-01-01",
+  const order: NewOrder = {
+    status: "pending",
     client: "client name",
     products: [
       {
@@ -20,7 +17,7 @@ describe("<CreateOrder />", () => {
           name: "fries",
           price: 500,
           image: "",
-          type: PRODUCT_TYPE.lunch,
+          type: "lunch",
           dateEntry: "",
         },
         qty: 3,
@@ -37,6 +34,7 @@ describe("<CreateOrder />", () => {
         onAddProduct={anyFunction}
         onChangeCustomer={anyFunction}
         onSubmit={anyFunction}
+        loading={false}
       />,
     );
     const totalElement = container.getElementsByClassName(
@@ -46,7 +44,7 @@ describe("<CreateOrder />", () => {
   });
 
   test("Should show as disable submit button when client name is not set", async () => {
-    const newOrder = {
+    const newOrder: NewOrder = {
       ...order,
       client: "",
     };
@@ -58,6 +56,7 @@ describe("<CreateOrder />", () => {
         onAddProduct={anyFunction}
         onChangeCustomer={anyFunction}
         onSubmit={anyFunction}
+        loading={false}
       />,
     );
     const submitButton = container.querySelector(
@@ -68,7 +67,7 @@ describe("<CreateOrder />", () => {
   });
 
   test("Should show as disable submit button when has not products", async () => {
-    const newOrder = {
+    const newOrder: NewOrder = {
       ...order,
       products: [],
     };
@@ -80,6 +79,7 @@ describe("<CreateOrder />", () => {
         onAddProduct={anyFunction}
         onChangeCustomer={anyFunction}
         onSubmit={anyFunction}
+        loading={false}
       />,
     );
     const submitButton = container.querySelector(
@@ -98,6 +98,7 @@ describe("<CreateOrder />", () => {
         onAddProduct={anyFunction}
         onChangeCustomer={anyFunction}
         onSubmit={anyFunction}
+        loading={false}
       />,
     );
     const submitButton = container.querySelector(

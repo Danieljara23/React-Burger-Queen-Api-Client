@@ -1,19 +1,22 @@
 import { IProduct } from "./product";
 
-export enum ORDER_STATUS {
-  pending = "pending",
-  ready = "ready",
-}
+export type ORDER_STATUS = "pending" | "ready";
 
-export interface IOrder {
+export type Order = {
   userId: number;
   status: ORDER_STATUS;
   dateEntry: string;
   client: string;
-  products: IOrderProduct[];
-}
+  products: OrderProduct[];
+};
 
-export interface IOrderProduct {
+export type NewOrder = {
+  status: ORDER_STATUS;
+  client: string;
+  products: OrderProduct[];
+};
+
+export type OrderProduct = {
   product: IProduct;
   qty: number;
-}
+};

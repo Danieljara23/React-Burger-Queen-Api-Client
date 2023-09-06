@@ -1,12 +1,13 @@
 import { IUser } from "./user";
 
-export interface ILoginResponse {
+export type LoginResponse = {
   accessToken: string;
   user: IUser;
-}
+};
 
-export interface IJsonFetchParams {
+export type JsonFetchParams = {
   url: string;
   method: string;
-  body?: object;
-}
+  body?: string;
+  headers: object;
+};

@@ -1,9 +1,9 @@
-import { IUser } from "../../models/user";
+import { User } from "../../models/user";
 
-interface NavBarProps {
+type NavBarProps = {
   onLogout: () => void;
-  user: IUser;
-}
+  user: User;
+};
 
 const NavBar: React.FC<NavBarProps> = ({ onLogout, user }) => {
   const userSignedIn = user.id > 0;
