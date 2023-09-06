@@ -10,7 +10,7 @@
 
 ### Peticiones al API
 
-El Common.service.ts se encarga de realizar la petición, controlar el token y agregar los encabezados correctos, así como también leer el mensaje de error e interceptarlo.
+El Common.service.ts se encarga de realizar la petición y agregar el encabezado `"Content-Type": "application/json"`, así como también leer el mensaje de error e interceptarlo.
 
 ### Token Repository
 
@@ -32,7 +32,7 @@ Describir efectos de cada componente
 
 ### Modelos
 
-- Order: Contiene el type de la orden, del producto de la orden y el type de estado de la orden.
+- Order: Contiene el type de la orden, del item de la orden y el type de estado de la orden.
 - Product: Contiene el type del producto y el type de tipo de producto
 - Response: Contiene el type del response del login y parámetros del request
 - Role: Contiene el type del tipo de usuario
@@ -54,20 +54,20 @@ Actualmente se tienen los test:
 
 - Waiter
 
-	- Should make request with correct params on submit the order
+	- Debería lanzar la petición con los parámetros correctos
 
 - CreateOrder
 
-	- Should show total prices as expected when have selected products
-	- Should show as disable submit button when client name is not set
-	- Should show as disable submit button when has not products
-	- Should show as NOT disable submit button when order is ready to be submit
+	- Debería de mostrar el precio cuando se seleccionen productos
+	- Debería de mostrar deshabilitado el botón cuando no se haya ingresado nombre de cliente
+	- Debería de mostrar deshabilitado el botón cuando no se hayan seleccionado productos
+	- Debería de mostrar habilitado el botón cuando la orden esté lista para ser enviada
 
 ## Estructura de archivos
 
 - `src/assets`: directorio para imágenes.
 - `src/components`: directorio para componentes React.
-- `src/models`: directorio para interfaces TypeScript.
+- `src/models`: directorio para types de TypeScript.
 - `src/routes`: directorio para componentes relacionados con rutas.
 - `src/services`: directorio para las funciones que interactúan con la API Rest y `localstorage`.
 
@@ -85,7 +85,7 @@ Actualmente se tienen los test:
 
 		![Create order preview](./pictures/createOrder.png)
 
-	- /home: menú de módulos
+	- /home: menú principal
 	- /orders/pending: listado de pedidos para preparar para jefa de cocina (historia de usuaria 3)
 	- /orders/delivering: listado de pedidos listos para servir para mesero (historia de usuario 4)
 	- /orders/delivered: listado de pedidos para entregados

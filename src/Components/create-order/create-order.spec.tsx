@@ -1,16 +1,14 @@
 import { render } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import CreateOrder from "./create-order";
-import { Order } from "../../models/order";
+import { NewOrder } from "../../models/order";
 
 describe("<CreateOrder />", () => {
   const anyFunction = () => {
     console.log("anyFunction called");
   };
-  const order: Order = {
-    userId: 0,
+  const order: NewOrder = {
     status: "pending",
-    dateEntry: "2020-01-01",
     client: "client name",
     products: [
       {
@@ -46,7 +44,7 @@ describe("<CreateOrder />", () => {
   });
 
   test("Should show as disable submit button when client name is not set", async () => {
-    const newOrder = {
+    const newOrder: NewOrder = {
       ...order,
       client: "",
     };
@@ -69,7 +67,7 @@ describe("<CreateOrder />", () => {
   });
 
   test("Should show as disable submit button when has not products", async () => {
-    const newOrder = {
+    const newOrder: NewOrder = {
       ...order,
       products: [],
     };
