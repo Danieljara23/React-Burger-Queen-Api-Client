@@ -52,31 +52,34 @@ const Waiter: React.FC = () => {
    * @param productToModify
    */
   const modifyProductList = (add: boolean, productToModify: Product) => {
-    const modifier = add ? 1 : -1;
-    const alreadyInList = newOrder.products.find(
-      (orderProduct: OrderProduct) =>
-        orderProduct.product.id === productToModify.id,
-    );
-    const mappedList = newOrder.products.map((orderProduct: OrderProduct) => {
-      const isThis = orderProduct.product.id === productToModify.id;
+		setMessage("");
+		const modifier = add ? 1 : -1;
+    setNewOrder((prevNewOrder) => {
+			const inList = prevNewOrder.products.find(
+				(orderProduct: OrderProduct) =>
+					orderProduct.product.id === productToModify.id,
+			);
+			const mappedList = prevNewOrder.products.map((orderProduct: OrderProduct) => {
+				const isThis = orderProduct.product.id === productToModify.id;
 
-      return {
-        ...orderProduct,
-        qty: isThis ? orderProduct.qty + modifier : orderProduct.qty,
-      };
-    });
-    const thisProd = {
-      product: productToModify,
-      qty: modifier,
-    };
-    const newList = alreadyInList
-      ? mappedList
-      : [...newOrder.products, thisProd];
+				return {
+					...orderProduct,
+					qty: isThis ? orderProduct.qty + modifier : orderProduct.qty,
+				};
+			});
+			const thisProd = {
+				product: productToModify,
+				qty: modifier,
+			};
+			const newList = inList
+				? mappedList
+				: [...prevNewOrder.products, thisProd];
 
-    onSetOrder({
-      ...newOrder,
-      products: newList.filter(({ qty }) => qty > 0),
-    });
+			return{
+				...prevNewOrder,
+				products: newList.filter(({ qty }) => qty > 0),
+			};
+		});
   };
   const handleAddProduct = (product: Product) =>
     modifyProductList(ADD_PRODUCT, product);

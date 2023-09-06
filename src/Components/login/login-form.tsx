@@ -19,12 +19,12 @@ const LoginForm: React.FC = () => {
 
   const handleChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMessage("");
-    setFormData({ ...formData, email: e.target.value });
+    setFormData((prevFormData) => ({ ...prevFormData, email: e.target.value }));
   };
 
   const handleChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMessage("");
-    setFormData({ ...formData, password: e.target.value });
+    setFormData((prevFormData) => ({ ...prevFormData, password: e.target.value }));
   };
 
   const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
