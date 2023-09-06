@@ -19,12 +19,12 @@ const initialOrder: NewOrder = {
 
 const Waiter: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
-  const [activeTab, setActiveTab] = useState<PRODUCT_TYPE>("Desayuno");
+  const [selectedCategory, setSelectedCategory] = useState<PRODUCT_TYPE>("Desayuno");
   const [newOrder, setNewOrder] = useState<NewOrder>(initialOrder);
   const { loading, message, setLoading, setMessage, setLoadingAndMessage } =
     LoadingMessageHook();
   const tabButtonClass = (prodType: PRODUCT_TYPE) =>
-    activeTab === prodType ? "" : "pseudo";
+    selectedCategory === prodType ? "" : "pseudo";
   const onSetOrder = (newOrder: NewOrder) => {
     setMessage("");
     setNewOrder(newOrder);
@@ -96,20 +96,20 @@ const Waiter: React.FC = () => {
           <div>
             <button
               className={tabButtonClass("Desayuno")}
-              onClick={() => setActiveTab("Desayuno")}
+              onClick={() => setSelectedCategory("Desayuno")}
             >
               Breakfast
             </button>
             <button
               className={tabButtonClass("Almuerzo")}
-              onClick={() => setActiveTab("Almuerzo")}
+              onClick={() => setSelectedCategory("Almuerzo")}
             >
               Lunch
             </button>
           </div>
           <ProductList
             products={products.filter(
-              (product: Product) => product.type === activeTab,
+              (product: Product) => product.type === selectedCategory,
             )}
             onAddProduct={handleAddProduct}
           />
