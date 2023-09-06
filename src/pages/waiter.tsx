@@ -1,15 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 import { getProducts } from "../services/product-repository";
 import { PRODUCT_TYPE, Product } from "../models/product.d";
-import { NewOrder, OrderProduct } from "../models/order.d";
+import { NewOrder, OrderProduct, WaiterReduceParams } from "../models/order.d";
 import ProductList from "../Components/product-list/product-list";
 import "./waiter.css";
 import CreateOrder from "../Components/create-order/create-order";
 import { createOrder } from "../services/order-repository";
 import { LoadingMessageHook } from "../Hooks/loading-message-hook";
-
-const ADD_PRODUCT = true;
-const REMOVE_PRODUCT = false;
 
 const initialOrder: NewOrder = {
   client: "",
@@ -17,49 +14,24 @@ const initialOrder: NewOrder = {
   status: "pending",
 };
 
-const Waiter: React.FC = () => {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState<PRODUCT_TYPE>("Desayuno");
-  const [newOrder, setNewOrder] = useState<NewOrder>(initialOrder);
-  const { loading, message, setLoading, setMessage, setLoadingAndMessage } =
-    LoadingMessageHook();
-  const tabButtonClass = (prodType: PRODUCT_TYPE) =>
-    selectedCategory === prodType ? "" : "pseudo";
-  const onSetOrder = (newOrder: NewOrder) => {
-    setMessage("");
-    setNewOrder(newOrder);
-  };
-  const handleChangeCustomer = (e: React.ChangeEvent<HTMLInputElement>) =>
-    onSetOrder({ ...newOrder, client: e.target.value });
-  const handleSubmitCreateOrder = async (
-    e: React.ChangeEvent<HTMLFormElement>,
-  ) => {
-    e.preventDefault();
-    let newMsg = "Your order has been created";
-    setLoading(true);
-    try {
-      await createOrder(newOrder);
-      onSetOrder(initialOrder);
-    } catch (error) {
-      newMsg = "Something went wrong creating your order";
-    }
-    setLoadingAndMessage(false, newMsg);
-  };
-
-  /**
-   * add or remove product from order product list
-   * @param add
-   * @param productToModify
-   */
-  const modifyProductList = (add: boolean, productToModify: Product) => {
-		setMessage("");
-		const modifier = add ? 1 : -1;
-    setNewOrder((prevNewOrder) => {
-			const inList = prevNewOrder.products.find(
+const reducer = (state: NewOrder, action: WaiterReduceParams) => {
+	switch (action.type) {
+    case "SET_CUSTOMER_NAME":
+      return {
+        ...state,
+        client: action.payload
+      };
+    case "RESET_ORDER":
+      return initialOrder;
+		case "ADD_PRODUCT":
+		case "DEL_PRODUCT":
+			const modifier = action.type === "ADD_PRODUCT" ? 1 : -1;
+			const productToModify = action.payload;
+			const inList = state.products.find(
 				(orderProduct: OrderProduct) =>
 					orderProduct.product.id === productToModify.id,
 			);
-			const mappedList = prevNewOrder.products.map((orderProduct: OrderProduct) => {
+			const mappedList = state.products.map((orderProduct: OrderProduct) => {
 				const isThis = orderProduct.product.id === productToModify.id;
 
 				return {
@@ -73,18 +45,49 @@ const Waiter: React.FC = () => {
 			};
 			const newList = inList
 				? mappedList
-				: [...prevNewOrder.products, thisProd];
+				: [...state.products, thisProd];
 
 			return{
-				...prevNewOrder,
+				...state,
 				products: newList.filter(({ qty }) => qty > 0),
 			};
-		});
+    default:
+      return state;
+  }
+};
+
+const Waiter: React.FC = () => {
+  const [state, dispatch] = useReducer(reducer, initialOrder);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<PRODUCT_TYPE>("Desayuno");
+  const { loading, message, setLoading, setMessage, setLoadingAndMessage } =
+    LoadingMessageHook();
+  const tabButtonClass = (prodType: PRODUCT_TYPE) =>
+    selectedCategory === prodType ? "" : "pseudo";
+  const onDispatch = (params: WaiterReduceParams) => {
+    setMessage("");
+    dispatch(params);
+  };
+  const handleChangeCustomer = (e: React.ChangeEvent<HTMLInputElement>) =>
+		onDispatch({ type: "SET_CUSTOMER_NAME", payload: e.target.value });
+  const handleSubmitCreateOrder = async (
+    e: React.ChangeEvent<HTMLFormElement>,
+  ) => {
+    e.preventDefault();
+    let newMsg = "Your order has been created";
+    setLoading(true);
+    try {
+      await createOrder(state);
+      onDispatch({ type: "RESET_ORDER", payload: null });
+    } catch (error) {
+      newMsg = "Something went wrong creating your order";
+    }
+    setLoadingAndMessage(false, newMsg);
   };
   const handleAddProduct = (product: Product) =>
-    modifyProductList(ADD_PRODUCT, product);
+    onDispatch({ type: "ADD_PRODUCT", payload: product });
   const handleRemoveProduct = (product: Product) =>
-    modifyProductList(REMOVE_PRODUCT, product);
+    onDispatch({ type: "DEL_PRODUCT", payload: product });
   const getAllProducts = async () => setProducts(await getProducts());
     useEffect(() => {
     getAllProducts();
@@ -119,7 +122,7 @@ const Waiter: React.FC = () => {
         </section>
         <section>
           <CreateOrder
-            order={newOrder}
+            order={state}
             onRemoveProduct={handleRemoveProduct}
             onAddProduct={handleAddProduct}
             onChangeCustomer={handleChangeCustomer}

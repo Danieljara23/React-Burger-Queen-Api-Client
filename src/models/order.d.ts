@@ -1,6 +1,12 @@
 import { IProduct } from "./product";
 
 export type ORDER_STATUS = "pending" | "ready";
+export type WAITER_REDUCER_ACTION = "ADD_PRODUCT" | "DEL_PRODUCT" | "SET_CUSTOMER_NAME" | "RESET_ORDER";
+
+export type WaiterReduceParams = {
+	type: WAITER_REDUCER_ACTION;
+	payload: Product | null | string;
+};
 
 export type Order = {
   userId: number;
