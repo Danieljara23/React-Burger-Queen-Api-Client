@@ -7,6 +7,7 @@ import "./waiter.css";
 import CreateOrder from "../Components/create-order/create-order";
 import { createOrder } from "../services/order-repository";
 import { LoadingMessageHook } from "../Hooks/loading-message-hook";
+import { couldNotCreate, createdCorrectly } from "../resources";
 
 const initialOrder: NewOrder = {
   client: "",
@@ -74,13 +75,13 @@ const Waiter: React.FC = () => {
     e: React.ChangeEvent<HTMLFormElement>,
   ) => {
     e.preventDefault();
-    let newMsg = "Your order has been created";
+    let newMsg = createdCorrectly("order");
     setLoading(true);
     try {
       await createOrder(state);
       onDispatch({ type: "RESET_ORDER", payload: null });
     } catch (error) {
-      newMsg = "Something went wrong creating your order";
+      newMsg = couldNotCreate("order");
     }
     setLoadingAndMessage(false, newMsg);
   };

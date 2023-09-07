@@ -40,12 +40,12 @@ const CreateOrder: React.FC<CreateOrderProps> = ({
         )}
       </div>
       <form onSubmit={onSubmit}>
-        <label htmlFor="costumer-name">Costumer name:</label>
+        <label htmlFor="customer-name">Customer name:</label>
         <input
           type="text"
           required
-          name="costumer-name"
-          id="costumer-name"
+          name="customer-name"
+          id="customer-name"
           value={order.client}
           onChange={onChangeCustomer}
           disabled={loading}
