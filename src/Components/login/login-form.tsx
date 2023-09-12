@@ -4,11 +4,11 @@ import burgerImg from "../../assets/burger.jpg";
 import "./login-form.css";
 import { useNavigate } from "react-router-dom";
 import { PATHNAMES } from "../../services/route-service";
-import { LoadingMessageHook } from "../../Hooks/loading-message-hook";
+import { useRequestHook } from "../../Hooks/use-request-hook";
 
 const LoginForm: React.FC = () => {
   const navigate = useNavigate();
-  const { loading, message, setLoading, setMessage } = LoadingMessageHook();
+  const { loading, setMessage, message, execute } = useRequestHook();
 
   const initialFormState = {
     email: "",
@@ -29,14 +29,9 @@ const LoginForm: React.FC = () => {
 
   const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setLoading(true);
-    try {
-      await login(formData.email, formData.password);
-      navigate(PATHNAMES.HOME);
-    } catch (error) {
-      setMessage((error as Error).message);
-    }
-    setLoading(false);
+    const result = await execute(login(formData.email, formData.password));
+		if(result !== null)
+			navigate(PATHNAMES.HOME);
   };
 
   return (

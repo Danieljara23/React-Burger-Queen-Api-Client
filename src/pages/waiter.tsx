@@ -6,7 +6,7 @@ import ProductList from "../Components/product-list/product-list";
 import "./waiter.css";
 import CreateOrder from "../Components/create-order/create-order";
 import { createOrder } from "../services/order-repository";
-import { LoadingMessageHook } from "../Hooks/loading-message-hook";
+import { useRequestHook } from "../Hooks/use-request-hook";
 
 const ADD_PRODUCT = true;
 const REMOVE_PRODUCT = false;
@@ -21,8 +21,8 @@ const Waiter: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [activeTab, setActiveTab] = useState<PRODUCT_TYPE>("Desayuno");
   const [newOrder, setNewOrder] = useState<NewOrder>(initialOrder);
-  const { loading, message, setLoading, setMessage, setLoadingAndMessage } =
-    LoadingMessageHook();
+  const { loading, message, execute, setMessage } =
+    useRequestHook();
   const tabButtonClass = (prodType: PRODUCT_TYPE) =>
     activeTab === prodType ? "" : "pseudo";
   const onSetOrder = (newOrder: NewOrder) => {
@@ -36,14 +36,13 @@ const Waiter: React.FC = () => {
   ) => {
     e.preventDefault();
     let newMsg = "Your order has been created";
-    setLoading(true);
-    try {
-      await createOrder(newOrder);
-      onSetOrder(initialOrder);
-    } catch (error) {
-      newMsg = "Something went wrong creating your order";
+		const result = await execute(createOrder(newOrder));
+		if (result !== null) {
+			onSetOrder(initialOrder);
+    } else {
+			newMsg = "Something went wrong creating your order";
     }
-    setLoadingAndMessage(false, newMsg);
+    setMessage(newMsg);
   };
 
   /**
