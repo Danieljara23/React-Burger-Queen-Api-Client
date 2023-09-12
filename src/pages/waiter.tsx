@@ -6,8 +6,8 @@ import ProductList from "../Components/product-list/product-list";
 import "./waiter.css";
 import CreateOrder from "../Components/create-order/create-order";
 import { createOrder } from "../services/order-repository";
-import { LoadingMessageHook } from "../Hooks/loading-message-hook";
 import { couldNotCreate, createdCorrectly } from "../resources";
+import { useRequestHook } from "../Hooks/use-request-hook";
 
 const initialOrder: NewOrder = {
   client: "",
@@ -61,8 +61,8 @@ const Waiter: React.FC = () => {
   const [state, dispatch] = useReducer(reducer, initialOrder);
   const [products, setProducts] = useState<Product[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<PRODUCT_TYPE>("Desayuno");
-  const { loading, message, setLoading, setMessage, setLoadingAndMessage } =
-    LoadingMessageHook();
+  const { loading, message, execute, setMessage } =
+    useRequestHook();
   const tabButtonClass = (prodType: PRODUCT_TYPE) =>
     selectedCategory === prodType ? "" : "pseudo";
   const onDispatch = (params: WaiterReduceParams) => {
@@ -75,15 +75,14 @@ const Waiter: React.FC = () => {
     e: React.ChangeEvent<HTMLFormElement>,
   ) => {
     e.preventDefault();
-    let newMsg = createdCorrectly("order");
-    setLoading(true);
-    try {
-      await createOrder(state);
-      onDispatch({ type: "RESET_ORDER", payload: null });
-    } catch (error) {
+		let newMsg = createdCorrectly("order");
+		const result = await execute(createOrder(state));
+		if (result !== null) {
+			onDispatch({ type: "RESET_ORDER", payload: null });
+    } else {
       newMsg = couldNotCreate("order");
     }
-    setLoadingAndMessage(false, newMsg);
+    setMessage(newMsg);
   };
   const handleAddProduct = (product: Product) =>
     onDispatch({ type: "ADD_PRODUCT", payload: product });
