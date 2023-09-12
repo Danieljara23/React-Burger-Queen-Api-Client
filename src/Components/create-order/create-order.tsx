@@ -7,6 +7,7 @@ type CreateOrderProps = {
   order: NewOrder;
   onAddProduct: (product: Product) => void;
   onRemoveProduct: (product: Product) => void;
+  onRemoveProductFromList: (product: Product) => void;
   onChangeCustomer: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onSubmit: (e: React.ChangeEvent<HTMLFormElement>) => void;
   orderMsg: string;
@@ -18,6 +19,7 @@ const CreateOrder: React.FC<CreateOrderProps> = ({
   orderMsg,
   loading,
   onRemoveProduct,
+  onRemoveProductFromList,
   onAddProduct,
   onChangeCustomer,
   onSubmit,
@@ -29,6 +31,7 @@ const CreateOrder: React.FC<CreateOrderProps> = ({
         order={order}
         addProduct={onAddProduct}
         removeProduct={onRemoveProduct}
+        removeProductFromList={onRemoveProductFromList}
       />
       <div className="create-order-total-cost">
         {" "}

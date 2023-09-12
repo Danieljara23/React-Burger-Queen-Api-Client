@@ -15,19 +15,19 @@ const initialOrder: NewOrder = {
   status: "pending",
 };
 
-const reducer = (state: NewOrder, action: WaiterReduceParams) => {
+const reducer = (state: NewOrder, action: WaiterReduceParams): NewOrder => {
 	switch (action.type) {
     case "SET_CUSTOMER_NAME":
       return {
         ...state,
-        client: action.payload
+        client: (action.payload as string)
       };
     case "RESET_ORDER":
       return initialOrder;
 		case "ADD_PRODUCT":
 		case "DEL_PRODUCT":
 			const modifier = action.type === "ADD_PRODUCT" ? 1 : -1;
-			const productToModify = action.payload;
+			const productToModify = action.payload as Product;
 			const inList = state.products.find(
 				(orderProduct: OrderProduct) =>
 					orderProduct.product.id === productToModify.id,
@@ -50,7 +50,12 @@ const reducer = (state: NewOrder, action: WaiterReduceParams) => {
 
 			return{
 				...state,
-				products: newList.filter(({ qty }) => qty > 0),
+				products: newList,
+			};
+		case "DEL_PRODUCT_FROM_LIST":
+			return{
+				...state,
+				products: state.products.filter(({ product }) => product.id !== (action.payload as Product).id),
 			};
     default:
       return state;
@@ -88,6 +93,8 @@ const Waiter: React.FC = () => {
     onDispatch({ type: "ADD_PRODUCT", payload: product });
   const handleRemoveProduct = (product: Product) =>
     onDispatch({ type: "DEL_PRODUCT", payload: product });
+  const handleRemoveProductFromList = (product: Product) =>
+    onDispatch({ type: "DEL_PRODUCT_FROM_LIST", payload: product });
   const getAllProducts = async () => setProducts(await getProducts());
     useEffect(() => {
     getAllProducts();
@@ -124,6 +131,7 @@ const Waiter: React.FC = () => {
           <CreateOrder
             order={state}
             onRemoveProduct={handleRemoveProduct}
+            onRemoveProductFromList={handleRemoveProductFromList}
             onAddProduct={handleAddProduct}
             onChangeCustomer={handleChangeCustomer}
             onSubmit={handleSubmitCreateOrder}

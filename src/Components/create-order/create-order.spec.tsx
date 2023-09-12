@@ -25,7 +25,7 @@ describe("<CreateOrder />", () => {
     ],
   };
 
-  test("Should show total prices as expected when have selected products", async () => {
+  test("Should show total prices as expected when have selected products", () => {
     const { container } = render(
       <CreateOrder
         order={order}
@@ -33,6 +33,7 @@ describe("<CreateOrder />", () => {
         onRemoveProduct={anyFunction}
         onAddProduct={anyFunction}
         onChangeCustomer={anyFunction}
+        onRemoveProductFromList={anyFunction}
         onSubmit={anyFunction}
         loading={false}
       />,
@@ -43,7 +44,7 @@ describe("<CreateOrder />", () => {
     expect(totalElement).toHaveTextContent("Total cost: $1500");
   });
 
-  test("Should show as disable submit button when client name is not set", async () => {
+  test("Should show as disable submit button when client name is not set", () => {
     const newOrder: NewOrder = {
       ...order,
       client: "",
@@ -53,12 +54,14 @@ describe("<CreateOrder />", () => {
         order={newOrder}
         orderMsg={""}
         onRemoveProduct={anyFunction}
+        onRemoveProductFromList={anyFunction}
         onAddProduct={anyFunction}
         onChangeCustomer={anyFunction}
         onSubmit={anyFunction}
         loading={false}
       />,
     );
+		// USAR MEJOR ID
     const submitButton = container.querySelector(
       "form > button",
     ) as HTMLButtonElement;
@@ -66,7 +69,7 @@ describe("<CreateOrder />", () => {
     expect(submitButton.disabled).toBe(true);
   });
 
-  test("Should show as disable submit button when has not products", async () => {
+  test("Should show as disable submit button when has not products", () => {
     const newOrder: NewOrder = {
       ...order,
       products: [],
@@ -76,12 +79,14 @@ describe("<CreateOrder />", () => {
         order={newOrder}
         orderMsg={""}
         onRemoveProduct={anyFunction}
+        onRemoveProductFromList={anyFunction}
         onAddProduct={anyFunction}
         onChangeCustomer={anyFunction}
         onSubmit={anyFunction}
         loading={false}
       />,
     );
+		// USAR MEJOR ID
     const submitButton = container.querySelector(
       "form > button",
     ) as HTMLButtonElement;
@@ -89,18 +94,20 @@ describe("<CreateOrder />", () => {
     expect(submitButton.disabled).toBe(true);
   });
 
-  test("Should show as NOT disable submit button when order is ready to be submit", async () => {
+  test("Should show as NOT disable submit button when order is ready to be submit", () => {
     const { container } = render(
       <CreateOrder
         order={order}
         orderMsg={""}
         onRemoveProduct={anyFunction}
+        onRemoveProductFromList={anyFunction}
         onAddProduct={anyFunction}
         onChangeCustomer={anyFunction}
         onSubmit={anyFunction}
         loading={false}
       />,
     );
+		// USAR MEJOR ID
     const submitButton = container.querySelector(
       "form > button",
     ) as HTMLButtonElement;

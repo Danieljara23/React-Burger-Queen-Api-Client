@@ -14,3 +14,8 @@
 .order-list-container span.product-name {
 	flex: 1;
 }
+
+.trash-button .trash-icon {
+	width: 25px;
+	height: auto;
+}

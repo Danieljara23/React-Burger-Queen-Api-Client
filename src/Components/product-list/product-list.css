@@ -6,19 +6,18 @@
 	gap: 10px;
 	justify-content: center;
 	overflow-y: auto;
-    max-height: calc(100vh - 321px);
+	max-height: calc(100vh - 321px);
 }
 
 .product-list-container > li {
 	width: 100px;
 	border: solid 1px #D9B100;
-    border-radius: 15px;
-    padding: 5px;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-	background-color: #eee;
+	border-radius: 15px;
+	padding: 5px;
+	text-align: center;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
 }
 
 .product-list-container > li > img {

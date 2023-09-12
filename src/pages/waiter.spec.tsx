@@ -34,7 +34,7 @@ describe("<Waiter />", () => {
       .spyOn(OrderRepository, "createOrder")
       .mockImplementation(() => Promise.resolve(true));
 
-    const { container, findByRole } = render(<Waiter />);
+    const { container, findByRole/*, usar findByX  */ } = render(<Waiter />);
     expect(await findByRole("listitem")).toBeInTheDocument();
     const clientNameInput = container.querySelector(
       "form > input[type='text']",
@@ -52,6 +52,9 @@ describe("<Waiter />", () => {
     await userEvent.click(submitButton);
 
     expect(submitButton.innerHTML).toBe("Create new order");
+		// mover esta validación al OrderRepository
     expect(OrderRepository.createOrder).toHaveBeenCalledWith(expectedOrder);
+		// validate successful message
+		
   });
 });

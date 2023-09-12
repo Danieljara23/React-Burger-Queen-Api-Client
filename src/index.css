@@ -15,6 +15,11 @@ button.pseudo {
 	border: solid 1px #d9b100;
 }
 
+button:disabled.pseudo {
+	color: white;
+	border: solid 1px #d9b100;
+}
+
 form > button[type] {
 	width: 100%;
 }
