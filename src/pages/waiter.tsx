@@ -76,6 +76,11 @@ const Waiter: React.FC = () => {
       products: newList.filter(({ qty }) => qty > 0),
     });
   };
+  const handleActiveTab = (e: unknown)=> {
+	const type = (e as React.ChangeEvent<HTMLInputElement>).target.getAttribute('data-type');
+	if (type !== null)
+		setActiveTab(type as PRODUCT_TYPE);
+};
   const handleAddProduct = (product: Product) =>
     modifyProductList(ADD_PRODUCT, product);
   const handleRemoveProduct = (product: Product) =>
@@ -94,13 +99,15 @@ const Waiter: React.FC = () => {
           <div>
             <button
               className={tabButtonClass("Desayuno")}
-              onClick={() => setActiveTab("Desayuno")}
+              data-type="Desayuno"
+              onClick={handleActiveTab}
             >
               Breakfast
             </button>
             <button
               className={tabButtonClass("Almuerzo")}
-              onClick={() => setActiveTab("Almuerzo")}
+              data-type="Almuerzo"
+              onClick={handleActiveTab}
             >
               Lunch
             </button>

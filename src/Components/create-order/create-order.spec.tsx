@@ -8,7 +8,6 @@ describe("<CreateOrder />", () => {
     console.log("anyFunction called");
   };
   const order: NewOrder = {
-    status: "pending",
     client: "client name",
     products: [
       {
