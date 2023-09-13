@@ -11,7 +11,6 @@ export type Order = {
 };
 
 export type NewOrder = {
-  status: ORDER_STATUS;
   client: string;
   products: OrderProduct[];
 };

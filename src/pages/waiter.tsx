@@ -14,7 +14,6 @@ const REMOVE_PRODUCT = false;
 const initialOrder: NewOrder = {
   client: "",
   products: [],
-  status: "pending",
 };
 
 const Waiter: React.FC = () => {
