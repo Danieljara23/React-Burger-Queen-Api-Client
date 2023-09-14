@@ -10,14 +10,12 @@ type CreateOrderProps = {
   onRemoveProductFromList: (product: Product) => void;
   onChangeCustomer: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onSubmit: (e: React.ChangeEvent<HTMLFormElement>) => void;
-  orderMsg: string;
-  loading: boolean;
+  disableForm: boolean;
 };
 
 const CreateOrder: React.FC<CreateOrderProps> = ({
   order,
-  orderMsg,
-  loading,
+  disableForm,
   onRemoveProduct,
   onRemoveProductFromList,
   onAddProduct,
@@ -51,18 +49,17 @@ const CreateOrder: React.FC<CreateOrderProps> = ({
           id="customer-name"
           value={order.client}
           onChange={onChangeCustomer}
-          disabled={loading}
+          disabled={disableForm}
         />
         <button
           disabled={
-            order.client === "" || order.products.length === 0 || loading
+            order.client === "" || order.products.length === 0 || disableForm
           }
           type="submit"
         >
           Create new order
         </button>
       </form>
-      {orderMsg && <div aria-live="polite">{orderMsg}</div>}
     </>
   );
 };

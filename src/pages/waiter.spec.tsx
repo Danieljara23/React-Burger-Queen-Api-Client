@@ -24,7 +24,6 @@ describe("<Waiter />", () => {
           qty: 2,
         },
       ],
-      status: "pending",
     };
 
     jest

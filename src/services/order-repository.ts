@@ -8,8 +8,7 @@ import { getSession } from "./token-repository";
  * @returns Promise<boolean>
  */
 export function createOrder(order: NewOrder): Promise<boolean> {
-  const { userId } = getSession();
-  const { token } = getSession();
+  const { userId, token } = getSession();
   const url = host + "/orders";
   const adjustDateString = (date: Date) =>
     date
@@ -20,6 +19,7 @@ export function createOrder(order: NewOrder): Promise<boolean> {
     ...order,
     userId: userId,
     dateEntry: adjustDateString(new Date()),
+	status: "pending",
   };
 
   return jsonFetch({

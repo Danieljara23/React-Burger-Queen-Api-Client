@@ -12,7 +12,6 @@ import { useRequestHook } from "../Hooks/use-request-hook";
 const initialOrder: NewOrder = {
   client: "",
   products: [],
-  status: "pending",
 };
 
 const reducer = (state: NewOrder, action: WaiterReduceParams): NewOrder => {
@@ -66,7 +65,8 @@ const Waiter: React.FC = () => {
   const [state, dispatch] = useReducer(reducer, initialOrder);
   const [products, setProducts] = useState<Product[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<PRODUCT_TYPE>("Desayuno");
-  const { loading, message, execute, setMessage } =
+  const [message, setMessage] = useState<string>("");
+  const { loading, execute, onError, onLoading } =
     useRequestHook();
   const tabButtonClass = (prodType: PRODUCT_TYPE) =>
     selectedCategory === prodType ? "" : "pseudo";
@@ -89,6 +89,11 @@ const Waiter: React.FC = () => {
     }
     setMessage(newMsg);
   };
+	const handleActiveTab = (e: unknown)=> {
+		const type = (e as React.ChangeEvent<HTMLInputElement>).target.getAttribute('data-type');
+		if (type !== null)
+			setSelectedCategory(type as PRODUCT_TYPE);
+	};
   const handleAddProduct = (product: Product) =>
     onDispatch({ type: "ADD_PRODUCT", payload: product });
   const handleRemoveProduct = (product: Product) =>
@@ -100,6 +105,9 @@ const Waiter: React.FC = () => {
     getAllProducts();
   }, []);
 
+  onError(setMessage);
+  onLoading(setMessage);
+
   return (
     <>
       <h1>Waiter</h1>
@@ -109,13 +117,15 @@ const Waiter: React.FC = () => {
           <div>
             <button
               className={tabButtonClass("Desayuno")}
-              onClick={() => setSelectedCategory("Desayuno")}
+              data-type="Desayuno"
+              onClick={handleActiveTab}
             >
               Breakfast
             </button>
             <button
               className={tabButtonClass("Almuerzo")}
-              onClick={() => setSelectedCategory("Almuerzo")}
+              data-type="Almuerzo"
+              onClick={handleActiveTab}
             >
               Lunch
             </button>
@@ -135,9 +145,9 @@ const Waiter: React.FC = () => {
             onAddProduct={handleAddProduct}
             onChangeCustomer={handleChangeCustomer}
             onSubmit={handleSubmitCreateOrder}
-            orderMsg={message}
-            loading={loading}
+            disableForm={loading}
           />
+          {message && <div aria-live="polite">{message}</div>}
         </section>
       </div>
     </>

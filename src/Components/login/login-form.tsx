@@ -8,8 +8,8 @@ import { useRequestHook } from "../../Hooks/use-request-hook";
 
 const LoginForm: React.FC = () => {
   const navigate = useNavigate();
-  const { loading, setMessage, message, execute } = useRequestHook();
-
+  const { loading, onError, onLoading, execute } = useRequestHook();
+  const [message, setMessage] = useState("");
   const initialFormState = {
     email: "",
     password: "",
@@ -33,6 +33,9 @@ const LoginForm: React.FC = () => {
 		if(result !== null)
 			navigate(PATHNAMES.HOME);
   };
+
+  onError(setMessage);
+  onLoading(setMessage);
 
   return (
     <>

@@ -1,22 +1,22 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export const useRequestHook = () => {
-	const [loadingMessage, setLoadingMessage] = useState({
+	const [loadingError, setLoadingError] = useState<{ loading: boolean; error: Error | null; }>({
 		loading: false,
-		message: "",
+		error: null,
 	});
 
 	const setLoading = (loading: boolean) => {
-		setLoadingMessage((prevLoadingMessage) => ({
+		setLoadingError((prevLoadingError) => ({
 			loading,
-			message: loading ? "Loading..." : prevLoadingMessage.message,
+			error: loading ? null : prevLoadingError.error,
 		}));
 	};
 
-	const setMessage = (message: string) => {
-		setLoadingMessage((prevLoadingMessage) => ({
-			loading: prevLoadingMessage.loading,
-			message,
+	const setError = (error: Error) => {
+		setLoadingError((prevLoadingError) => ({
+			loading: prevLoadingError.loading,
+			error,
 		}));
 	};
 
@@ -26,16 +26,29 @@ export const useRequestHook = () => {
 		try {
 			response = await request;
 		} catch (error) {
-			setMessage((error as Error).message);
+			setError(error as Error);
 		}
 		setLoading(false);
 		return response;
 	};
 
+	const onError = (callback: (msg: string) => void) =>
+		useEffect(() => {
+			if (loadingError.error !== null)
+				callback(loadingError.error.message);
+		}, [loadingError.error]);
+
+	const onLoading = (callback: (msg: string) => void) =>
+		useEffect(() => {
+			if (loadingError.loading)
+				callback("Loading...");
+		}, [loadingError.loading]);
+
 	return {
-		message: loadingMessage.message,
-		loading: loadingMessage.loading,
-		setMessage,
-		execute
+		error: loadingError.error,
+		loading: loadingError.loading,
+		execute,
+		onError,
+		onLoading
 	};
 };

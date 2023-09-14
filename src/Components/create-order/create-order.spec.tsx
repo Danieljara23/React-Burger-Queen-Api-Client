@@ -8,7 +8,6 @@ describe("<CreateOrder />", () => {
     console.log("anyFunction called");
   };
   const order: NewOrder = {
-    status: "pending",
     client: "client name",
     products: [
       {
@@ -29,13 +28,12 @@ describe("<CreateOrder />", () => {
     const { container } = render(
       <CreateOrder
         order={order}
-        orderMsg={""}
         onRemoveProduct={anyFunction}
         onAddProduct={anyFunction}
         onChangeCustomer={anyFunction}
         onRemoveProductFromList={anyFunction}
         onSubmit={anyFunction}
-        loading={false}
+        disableForm={false}
       />,
     );
     const totalElement = container.getElementsByClassName(
@@ -52,13 +50,12 @@ describe("<CreateOrder />", () => {
     const { container } = render(
       <CreateOrder
         order={newOrder}
-        orderMsg={""}
         onRemoveProduct={anyFunction}
         onRemoveProductFromList={anyFunction}
         onAddProduct={anyFunction}
         onChangeCustomer={anyFunction}
         onSubmit={anyFunction}
-        loading={false}
+        disableForm={false}
       />,
     );
 		// USAR MEJOR ID
@@ -77,13 +74,12 @@ describe("<CreateOrder />", () => {
     const { container } = render(
       <CreateOrder
         order={newOrder}
-        orderMsg={""}
         onRemoveProduct={anyFunction}
         onRemoveProductFromList={anyFunction}
         onAddProduct={anyFunction}
         onChangeCustomer={anyFunction}
         onSubmit={anyFunction}
-        loading={false}
+        disableForm={false}
       />,
     );
 		// USAR MEJOR ID
@@ -98,13 +94,12 @@ describe("<CreateOrder />", () => {
     const { container } = render(
       <CreateOrder
         order={order}
-        orderMsg={""}
         onRemoveProduct={anyFunction}
         onRemoveProductFromList={anyFunction}
         onAddProduct={anyFunction}
         onChangeCustomer={anyFunction}
         onSubmit={anyFunction}
-        loading={false}
+        disableForm={false}
       />,
     );
 		// USAR MEJOR ID
