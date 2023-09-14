@@ -20,7 +20,8 @@ const Waiter: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [activeTab, setActiveTab] = useState<PRODUCT_TYPE>("Desayuno");
   const [newOrder, setNewOrder] = useState<NewOrder>(initialOrder);
-  const { loading, message, execute, setMessage } =
+  const [message, setMessage] = useState<string>("");
+  const { loading, execute, onError, onLoading } =
     useRequestHook();
   const tabButtonClass = (prodType: PRODUCT_TYPE) =>
     activeTab === prodType ? "" : "pseudo";
@@ -90,6 +91,9 @@ const Waiter: React.FC = () => {
     getAllProducts();
   }, []);
 
+  onError(setMessage);
+  onLoading(setMessage);
+
   return (
     <>
       <h1>Waiter</h1>
@@ -126,9 +130,9 @@ const Waiter: React.FC = () => {
             onAddProduct={handleAddProduct}
             onChangeCustomer={handleChangeCustomer}
             onSubmit={handleSubmitCreateOrder}
-            orderMsg={message}
-            loading={loading}
+            disableForm={loading}
           />
+          {message && <div aria-live="polite">{message}</div>}
         </section>
       </div>
     </>

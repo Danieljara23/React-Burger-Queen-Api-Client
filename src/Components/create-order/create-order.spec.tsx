@@ -28,12 +28,11 @@ describe("<CreateOrder />", () => {
     const { container } = render(
       <CreateOrder
         order={order}
-        orderMsg={""}
         onRemoveProduct={anyFunction}
         onAddProduct={anyFunction}
         onChangeCustomer={anyFunction}
         onSubmit={anyFunction}
-        loading={false}
+        disableForm={false}
       />,
     );
     const totalElement = container.getElementsByClassName(
@@ -50,12 +49,11 @@ describe("<CreateOrder />", () => {
     const { container } = render(
       <CreateOrder
         order={newOrder}
-        orderMsg={""}
         onRemoveProduct={anyFunction}
         onAddProduct={anyFunction}
         onChangeCustomer={anyFunction}
         onSubmit={anyFunction}
-        loading={false}
+        disableForm={false}
       />,
     );
     const submitButton = container.querySelector(
@@ -73,12 +71,11 @@ describe("<CreateOrder />", () => {
     const { container } = render(
       <CreateOrder
         order={newOrder}
-        orderMsg={""}
         onRemoveProduct={anyFunction}
         onAddProduct={anyFunction}
         onChangeCustomer={anyFunction}
         onSubmit={anyFunction}
-        loading={false}
+        disableForm={false}
       />,
     );
     const submitButton = container.querySelector(
@@ -92,12 +89,11 @@ describe("<CreateOrder />", () => {
     const { container } = render(
       <CreateOrder
         order={order}
-        orderMsg={""}
         onRemoveProduct={anyFunction}
         onAddProduct={anyFunction}
         onChangeCustomer={anyFunction}
         onSubmit={anyFunction}
-        loading={false}
+        disableForm={false}
       />,
     );
     const submitButton = container.querySelector(
