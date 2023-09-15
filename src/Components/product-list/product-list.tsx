@@ -1,5 +1,5 @@
 import { Product } from "../../models/product";
-import "./product-list.css";
+import styles from "./product-list.module.css";
 
 type ProductListProps = {
   products: Product[];
@@ -11,11 +11,20 @@ const ProductList: React.FC<ProductListProps> = ({
   onAddProduct: addProduct,
 }) => {
   return (
-    <ul className="product-list-container">
+    <ul className={styles.product_list_container}>
       {products.map((product: Product) => (
-        <li key={product.id} onClick={() => addProduct(product)}>
+        <li
+          className={styles.product_list_container_li}
+          key={product.id}
+          onClick={() => addProduct(product)}
+        >
           {product.name}
-          <img src={product.image} alt={product.name} />${product.price}
+          <img
+            className={styles.product_list_container_img}
+            src={product.image}
+            alt={product.name}
+          />
+          ${product.price}
         </li>
       ))}
     </ul>

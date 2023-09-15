@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import { getSession } from "../../services/token-repository";
-import "./dashboard.css";
 import { PATHNAMES } from "../../services/route-service";
 
 const Dashboard: React.FC = () => {

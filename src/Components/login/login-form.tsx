@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { login } from "../../services/token-repository";
 import burgerImg from "../../assets/burger.jpg";
-import "./login-form.css";
+import styles from "./login-form.module.css";
 import { useNavigate } from "react-router-dom";
 import { PATHNAMES } from "../../services/route-service";
 import { useRequestHook } from "../../Hooks/use-request-hook";
@@ -41,8 +41,8 @@ const LoginForm: React.FC = () => {
 
   return (
     <>
-      <section className="login-site">
-        <img src={burgerImg} alt="burger" />
+      <section className={styles.login_site}>
+        <img src={burgerImg} className={styles.login_site_img} alt="burger" />
         <form onSubmit={handleSubmit}>
           <label htmlFor="user-email">E-mail:</label>
           <input

@@ -3,7 +3,7 @@ import { getProducts } from "../services/product-repository";
 import { PRODUCT_TYPE, Product } from "../models/product.d";
 import { NewOrder, OrderProduct, WaiterReduceParams } from "../models/order.d";
 import ProductList from "../Components/product-list/product-list";
-import "./waiter.css";
+import styles from "./waiter.module.css";
 import CreateOrder from "../Components/create-order/create-order";
 import { createOrder } from "../services/order-repository";
 import { couldNotCreate, createdCorrectly } from "../resources";
@@ -110,20 +110,28 @@ const Waiter: React.FC = () => {
 
   return (
     <>
-      <h1>Waiter</h1>
-      <div className="product-container">
-        <section>
+      <h1 className={styles.h1}>Waiter</h1>
+      <div className={styles.product_container}>
+        <section className={styles.product_container_section}>
           <h2>Products</h2>
           <div>
             <button
-              className={"tab-Desayuno selected-tab-" + selectedCategory}
+              className={
+                selectedCategory === "Almuerzo"
+                  ? styles.product_container_not_selected
+                  : ""
+              }
               data-type="Desayuno"
               onClick={handleSelectedCategory}
             >
               Breakfast
             </button>
             <button
-              className={"tab-Almuerzo selected-tab-" + selectedCategory}
+              className={
+                selectedCategory === "Desayuno"
+                  ? styles.product_container_not_selected
+                  : ""
+              }
               data-type="Almuerzo"
               onClick={handleSelectedCategory}
             >
@@ -137,7 +145,7 @@ const Waiter: React.FC = () => {
             onAddProduct={handleAddProduct}
           />
         </section>
-        <section>
+        <section className={styles.product_container_section}>
           <CreateOrder
             order={state}
             onRemoveProduct={handleRemoveProduct}

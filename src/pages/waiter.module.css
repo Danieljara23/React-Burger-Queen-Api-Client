@@ -1,20 +1,19 @@
-h1 {
+.h1 {
 	text-align: center;
 }
 
-.product-container {
+.product_container {
 	display: flex;
 	gap: 10px;
 	margin-left: 10px;
 	margin-right: 10px;
 }
 
-.product-container > section {
+.product_container_section {
 	flex: 1;
 }
 
-.product-container .tab-Desayuno:not(.selected-tab-Desayuno),
-.product-container .tab-Almuerzo:not(.selected-tab-Almuerzo) {
+.product_container_not_selected {
 	color: #d9b100;
 	border: solid 1px #d9b100;
 	background-color: #ffffff;

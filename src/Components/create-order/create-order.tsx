@@ -1,7 +1,7 @@
 import { NewOrder, OrderProduct } from "../../models/order";
 import { Product } from "../../models/product";
 import OrderProductList from "../order-product-list/order-product-list";
-import "./create-order.css";
+import styles from "./create-order.module.css";
 
 type CreateOrderProps = {
   order: NewOrder;
@@ -31,7 +31,7 @@ const CreateOrder: React.FC<CreateOrderProps> = ({
         removeProduct={onRemoveProduct}
         removeProductFromList={onRemoveProductFromList}
       />
-      <div className="create-order-total-cost">
+      <div className={styles.create_order_total_cost}>
         {" "}
         Total cost: $
         {order.products.reduce(

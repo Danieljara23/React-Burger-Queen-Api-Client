@@ -1,4 +1,4 @@
-.product-list-container {
+.product_list_container {
 	display: flex;
 	flex-wrap: wrap;
 	list-style-type: none;
@@ -9,7 +9,7 @@
 	max-height: calc(100vh - 321px);
 }
 
-.product-list-container > li {
+.product_list_container_li {
 	width: 100px;
 	border: solid 1px #D9B100;
 	border-radius: 15px;
@@ -20,6 +20,6 @@
 	justify-content: space-between;
 }
 
-.product-list-container > li > img {
+.product_list_container_img {
 	width: 100%;
 }

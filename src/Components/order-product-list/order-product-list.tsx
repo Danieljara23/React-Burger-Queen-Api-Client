@@ -1,6 +1,6 @@
 import { Product } from "../../models/product";
 import { NewOrder, OrderProduct } from "../../models/order";
-import "./order-product-list.css";
+import styles from "./order-product-list.module.css";
 import TrashIcon from "../trash-icon/trash-icon";
 
 type OrderProductListProps = {
@@ -21,9 +21,12 @@ const OrderProductList: React.FC<OrderProductListProps> = ({
       {order.products.length === 0 && (
         <span>You have not added products to this order</span>
       )}
-      <ul className="order-list-container">
+      <ul className={styles.order_list_container}>
         {order.products.map((orderProduct: OrderProduct) => (
-          <li key={orderProduct.product.id}>
+          <li
+            className={styles.order_list_container_li}
+            key={orderProduct.product.id}
+          >
             <button
               aria-label={"Remove one " + orderProduct.product.name}
               className="pseudo"
@@ -40,14 +43,16 @@ const OrderProductList: React.FC<OrderProductListProps> = ({
             >
               +
             </button>
-            <span className="product-name">{orderProduct.product.name}</span>
+            <span className={styles.order_list_container_product_name}>
+              {orderProduct.product.name}
+            </span>
             <span>$ {orderProduct.qty * orderProduct.product.price}</span>
             <button
               aria-label="Remove product"
               className="pseudo trash-button"
               onClick={() => removeProductFromList(orderProduct.product)}
             >
-              <TrashIcon className="trash-icon" />
+              <TrashIcon className={styles.trash_icon} />
             </button>
           </li>
         ))}
