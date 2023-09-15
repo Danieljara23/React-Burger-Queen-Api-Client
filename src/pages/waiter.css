@@ -12,3 +12,10 @@ h1 {
 .product-container > section {
 	flex: 1;
 }
+
+.product-container .tab-Desayuno:not(.selected-tab-Desayuno),
+.product-container .tab-Almuerzo:not(.selected-tab-Almuerzo) {
+	color: #d9b100;
+	border: solid 1px #d9b100;
+	background-color: #ffffff;
+}

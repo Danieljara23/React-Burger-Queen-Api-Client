@@ -69,8 +69,6 @@ const Waiter: React.FC = () => {
     useState<PRODUCT_TYPE>("Desayuno");
   const [message, setMessage] = useState<string>("");
   const { loading, execute, useOnError, useOnLoading } = useRequestHook();
-  const tabButtonClass = (prodType: PRODUCT_TYPE) =>
-    selectedCategory === prodType ? "" : "pseudo";
   const onDispatch = (params: WaiterReduceParams) => {
     setMessage("");
     dispatch(params);
@@ -90,7 +88,7 @@ const Waiter: React.FC = () => {
     }
     setMessage(newMsg);
   };
-  const handleActiveTab = (e: unknown) => {
+  const handleSelectedCategory = (e: unknown) => {
     const type = (e as React.ChangeEvent<HTMLInputElement>).target.getAttribute(
       "data-type",
     );
@@ -118,16 +116,16 @@ const Waiter: React.FC = () => {
           <h2>Products</h2>
           <div>
             <button
-              className={tabButtonClass("Desayuno")}
+              className={"tab-Desayuno selected-tab-" + selectedCategory}
               data-type="Desayuno"
-              onClick={handleActiveTab}
+              onClick={handleSelectedCategory}
             >
               Breakfast
             </button>
             <button
-              className={tabButtonClass("Almuerzo")}
+              className={"tab-Almuerzo selected-tab-" + selectedCategory}
               data-type="Almuerzo"
-              onClick={handleActiveTab}
+              onClick={handleSelectedCategory}
             >
               Lunch
             </button>
