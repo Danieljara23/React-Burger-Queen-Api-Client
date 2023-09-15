@@ -16,15 +16,6 @@ describe("<Waiter />", () => {
       type: "Desayuno",
       dateEntry: "",
     };
-    const expectedOrder = {
-      client: "Kvn",
-      products: [
-        {
-          product: cheeseBurgerProduct,
-          qty: 2,
-        },
-      ],
-    };
 
     jest
       .spyOn(ProductRepository, "getProducts")
@@ -33,27 +24,19 @@ describe("<Waiter />", () => {
       .spyOn(OrderRepository, "createOrder")
       .mockImplementation(() => Promise.resolve(true));
 
-    const { container, findByRole/*, usar findByX  */ } = render(<Waiter />);
-    expect(await findByRole("listitem")).toBeInTheDocument();
-    const clientNameInput = container.querySelector(
-      "form > input[type='text']",
-    ) as HTMLInputElement;
-    const burgerButton = container.querySelector(
-      ".product-list-container > li",
-    ) as HTMLButtonElement;
-    const submitButton = container.querySelector(
-      "form > button",
-    ) as HTMLButtonElement;
+    const { findByRole, getByLabelText, findByText } = render(<Waiter />);
+    const burgerButton = await findByRole("listitem");
+    const clientNameInput = getByLabelText("Customer name:");
+    const submitButton = await findByRole("button", {
+      name: /Create new order/i,
+    });
 
     await userEvent.type(clientNameInput, "Kvn");
     await userEvent.click(burgerButton);
     await userEvent.click(burgerButton);
     await userEvent.click(submitButton);
+    const message = await findByText("Your order has been created");
 
-    expect(submitButton.innerHTML).toBe("Create new order");
-		// mover esta validación al OrderRepository
-    expect(OrderRepository.createOrder).toHaveBeenCalledWith(expectedOrder);
-		// validate successful message
-		
+    expect(message).toBeInTheDocument();
   });
 });

@@ -8,7 +8,7 @@ import { useRequestHook } from "../../Hooks/use-request-hook";
 
 const LoginForm: React.FC = () => {
   const navigate = useNavigate();
-  const { loading, onError, onLoading, execute } = useRequestHook();
+  const { loading, useOnError, useOnLoading, execute } = useRequestHook();
   const [message, setMessage] = useState("");
   const initialFormState = {
     email: "",
@@ -24,18 +24,20 @@ const LoginForm: React.FC = () => {
 
   const handleChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMessage("");
-    setFormData((prevFormData) => ({ ...prevFormData, password: e.target.value }));
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      password: e.target.value,
+    }));
   };
 
   const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
     const result = await execute(login(formData.email, formData.password));
-		if(result !== null)
-			navigate(PATHNAMES.HOME);
+    if (result !== null) navigate(PATHNAMES.HOME);
   };
 
-  onError(setMessage);
-  onLoading(setMessage);
+  useOnError(setMessage);
+  useOnLoading(setMessage);
 
   return (
     <>

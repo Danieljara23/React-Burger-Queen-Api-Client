@@ -29,3 +29,9 @@ export const jsonFetch = async ({
     return result;
   }
 };
+
+export const adjustDateString = (date: Date): string =>
+  date
+    .toISOString()
+    .replace(/T/, " ")
+    .replace(/\.[\d]{3}Z/, "");

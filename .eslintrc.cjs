@@ -12,6 +12,6 @@ module.exports = {
 	rules: {
 		"react-refresh/only-export-components": "warn",
 		"prettier/prettier": "warn",
-		"@typescript-eslint/no-explicit-any": "true",
+		"@typescript-eslint/no-explicit-any": 2,
 	},
 };

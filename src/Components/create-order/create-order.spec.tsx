@@ -5,7 +5,7 @@ import { NewOrder } from "../../models/order";
 
 describe("<CreateOrder />", () => {
   const anyFunction = () => {
-    console.log("anyFunction called");
+    return;
   };
   const order: NewOrder = {
     client: "client name",
@@ -42,12 +42,12 @@ describe("<CreateOrder />", () => {
     expect(totalElement).toHaveTextContent("Total cost: $1500");
   });
 
-  test("Should show as disable submit button when client name is not set", () => {
+  test("Should show as disable submit button when client name is not set", async () => {
     const newOrder: NewOrder = {
       ...order,
       client: "",
     };
-    const { container } = render(
+    const { findByRole } = render(
       <CreateOrder
         order={newOrder}
         onRemoveProduct={anyFunction}
@@ -58,20 +58,19 @@ describe("<CreateOrder />", () => {
         disableForm={false}
       />,
     );
-		// USAR MEJOR ID
-    const submitButton = container.querySelector(
-      "form > button",
-    ) as HTMLButtonElement;
+    const submitButton = await findByRole("button", {
+      name: /Create new order/i,
+    });
 
-    expect(submitButton.disabled).toBe(true);
+    expect(submitButton.hasAttribute("disabled")).toBe(true);
   });
 
-  test("Should show as disable submit button when has not products", () => {
+  test("Should show as disable submit button when has not products", async () => {
     const newOrder: NewOrder = {
       ...order,
       products: [],
     };
-    const { container } = render(
+    const { findByRole } = render(
       <CreateOrder
         order={newOrder}
         onRemoveProduct={anyFunction}
@@ -82,16 +81,15 @@ describe("<CreateOrder />", () => {
         disableForm={false}
       />,
     );
-		// USAR MEJOR ID
-    const submitButton = container.querySelector(
-      "form > button",
-    ) as HTMLButtonElement;
+    const submitButton = await findByRole("button", {
+      name: /Create new order/i,
+    });
 
-    expect(submitButton.disabled).toBe(true);
+    expect(submitButton.hasAttribute("disabled")).toBe(true);
   });
 
-  test("Should show as NOT disable submit button when order is ready to be submit", () => {
-    const { container } = render(
+  test("Should show as NOT disable submit button when order is ready to be submit", async () => {
+    const { findByRole } = render(
       <CreateOrder
         order={order}
         onRemoveProduct={anyFunction}
@@ -102,11 +100,10 @@ describe("<CreateOrder />", () => {
         disableForm={false}
       />,
     );
-		// USAR MEJOR ID
-    const submitButton = container.querySelector(
-      "form > button",
-    ) as HTMLButtonElement;
+    const submitButton = await findByRole("button", {
+      name: /Create new order/i,
+    });
 
-    expect(submitButton.disabled).toBe(false);
+    expect(submitButton.hasAttribute("disabled")).toBe(false);
   });
 });
