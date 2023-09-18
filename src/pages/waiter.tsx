@@ -1,47 +1,48 @@
 import { useEffect, useState } from "react";
 import { getProducts } from "../services/product-repository";
-import { PRODUCT_TYPE, IProduct } from "../models/product.d";
-import { IOrder, IOrderProduct, ORDER_STATUS } from "../models/order.d";
+import { PRODUCT_TYPE, Product } from "../models/product.d";
+import { NewOrder, OrderProduct } from "../models/order.d";
 import ProductList from "../Components/product-list/product-list";
 import "./waiter.css";
 import CreateOrder from "../Components/create-order/create-order";
-import { getSession } from "../services/token-repository";
 import { createOrder } from "../services/order-repository";
+import { useRequestHook } from "../Hooks/use-request-hook";
 
 const ADD_PRODUCT = true;
 const REMOVE_PRODUCT = false;
 
+const initialOrder: NewOrder = {
+  client: "",
+  products: [],
+};
+
 const Waiter: React.FC = () => {
-  const { userId } = getSession();
-  const [products, setProducts] = useState<IProduct[]>([]);
-  const [orderMsg, setOrderMsg] = useState<string>("");
-  const [activeTab, setActiveTab] = useState(PRODUCT_TYPE.breakfast);
-  const initialOrder: IOrder = {
-    client: "",
-    products: [],
-    userId: userId,
-    status: ORDER_STATUS.pending,
-    dateEntry: "",
-  };
-  const [order, setOrder] = useState<IOrder>(initialOrder);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [activeTab, setActiveTab] = useState<PRODUCT_TYPE>("Desayuno");
+  const [newOrder, setNewOrder] = useState<NewOrder>(initialOrder);
+  const [message, setMessage] = useState<string>("");
+  const { loading, execute, onError, onLoading } =
+    useRequestHook();
   const tabButtonClass = (prodType: PRODUCT_TYPE) =>
     activeTab === prodType ? "" : "pseudo";
-  const onSetOrder = (newOrder: IOrder) => {
-    setOrderMsg("");
-    setOrder(newOrder);
+  const onSetOrder = (newOrder: NewOrder) => {
+    setMessage("");
+    setNewOrder(newOrder);
   };
   const handleChangeCustomer = (e: React.ChangeEvent<HTMLInputElement>) =>
-    onSetOrder({ ...order, client: e.target.value });
-  const handleSubmitCreateOrder = (e: React.ChangeEvent<HTMLFormElement>) => {
+    onSetOrder({ ...newOrder, client: e.target.value });
+  const handleSubmitCreateOrder = async (
+    e: React.ChangeEvent<HTMLFormElement>,
+  ) => {
     e.preventDefault();
-    createOrder(order)
-      .then(() => {
-        onSetOrder(initialOrder);
-        setOrderMsg("Your order has been created");
-      })
-      .catch(() => {
-        setOrderMsg("Something went wrong creating your order");
-      });
+    let newMsg = "Your order has been created";
+		const result = await execute(createOrder(newOrder));
+		if (result !== null) {
+			onSetOrder(initialOrder);
+    } else {
+			newMsg = "Something went wrong creating your order";
+    }
+    setMessage(newMsg);
   };
 
   /**
@@ -49,13 +50,13 @@ const Waiter: React.FC = () => {
    * @param add
    * @param productToModify
    */
-  const modifyProductList = (add: boolean, productToModify: IProduct) => {
+  const modifyProductList = (add: boolean, productToModify: Product) => {
     const modifier = add ? 1 : -1;
-    const alreadyInList = order.products.find(
-      (orderProduct: IOrderProduct) =>
+    const alreadyInList = newOrder.products.find(
+      (orderProduct: OrderProduct) =>
         orderProduct.product.id === productToModify.id,
     );
-    const mappedList = order.products.map((orderProduct: IOrderProduct) => {
+    const mappedList = newOrder.products.map((orderProduct: OrderProduct) => {
       const isThis = orderProduct.product.id === productToModify.id;
 
       return {
@@ -67,23 +68,31 @@ const Waiter: React.FC = () => {
       product: productToModify,
       qty: modifier,
     };
-    const newList = alreadyInList ? mappedList : [...order.products, thisProd];
+    const newList = alreadyInList
+      ? mappedList
+      : [...newOrder.products, thisProd];
 
     onSetOrder({
-      ...order,
+      ...newOrder,
       products: newList.filter(({ qty }) => qty > 0),
     });
   };
-  const handleAddProduct = (product: IProduct) =>
+  const handleActiveTab = (e: unknown)=> {
+	const type = (e as React.ChangeEvent<HTMLInputElement>).target.getAttribute('data-type');
+	if (type !== null)
+		setActiveTab(type as PRODUCT_TYPE);
+};
+  const handleAddProduct = (product: Product) =>
     modifyProductList(ADD_PRODUCT, product);
-  const handleRemoveProduct = (product: IProduct) =>
+  const handleRemoveProduct = (product: Product) =>
     modifyProductList(REMOVE_PRODUCT, product);
-
-  useEffect(() => {
-    getProducts().then((newProducts) => {
-      setProducts(newProducts);
-    });
+  const getAllProducts = async () => setProducts(await getProducts());
+    useEffect(() => {
+    getAllProducts();
   }, []);
+
+  onError(setMessage);
+  onLoading(setMessage);
 
   return (
     <>
@@ -93,34 +102,37 @@ const Waiter: React.FC = () => {
           <h2>Products</h2>
           <div>
             <button
-              className={tabButtonClass(PRODUCT_TYPE.breakfast)}
-              onClick={() => setActiveTab(PRODUCT_TYPE.breakfast)}
+              className={tabButtonClass("Desayuno")}
+              data-type="Desayuno"
+              onClick={handleActiveTab}
             >
               Breakfast
             </button>
             <button
-              className={tabButtonClass(PRODUCT_TYPE.lunch)}
-              onClick={() => setActiveTab(PRODUCT_TYPE.lunch)}
+              className={tabButtonClass("Almuerzo")}
+              data-type="Almuerzo"
+              onClick={handleActiveTab}
             >
               Lunch
             </button>
           </div>
           <ProductList
             products={products.filter(
-              (product: IProduct) => product.type === activeTab,
+              (product: Product) => product.type === activeTab,
             )}
             onAddProduct={handleAddProduct}
           />
         </section>
         <section>
           <CreateOrder
-            order={order}
+            order={newOrder}
             onRemoveProduct={handleRemoveProduct}
             onAddProduct={handleAddProduct}
             onChangeCustomer={handleChangeCustomer}
             onSubmit={handleSubmitCreateOrder}
-            orderMsg={orderMsg}
+            disableForm={loading}
           />
+          {message && <div aria-live="polite">{message}</div>}
         </section>
       </div>
     </>

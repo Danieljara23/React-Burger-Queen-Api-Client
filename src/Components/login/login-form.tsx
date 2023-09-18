@@ -1,15 +1,15 @@
 import { useState } from "react";
-import { IUser } from "../../models/user";
-import { ILoginResponse } from "../../models/response";
-import { createSession, login } from "../../services/token-repository";
+import { login } from "../../services/token-repository";
 import burgerImg from "../../assets/burger.jpg";
 import "./login-form.css";
 import { useNavigate } from "react-router-dom";
 import { PATHNAMES } from "../../services/route-service";
+import { useRequestHook } from "../../Hooks/use-request-hook";
 
 const LoginForm: React.FC = () => {
   const navigate = useNavigate();
-
+  const { loading, onError, onLoading, execute } = useRequestHook();
+  const [message, setMessage] = useState("");
   const initialFormState = {
     email: "",
     password: "",
@@ -17,32 +17,25 @@ const LoginForm: React.FC = () => {
 
   const [formData, setFormData] = useState(initialFormState);
 
-  const [loginLoading, setLoginLoading] = useState(false);
-
-  const [message, setMessage] = useState("");
-
-  const handleChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) =>
-    setFormData({ ...formData, email: e.target.value });
-
-  const handleChangePassword = (e: React.ChangeEvent<HTMLInputElement>) =>
-    setFormData({ ...formData, password: e.target.value });
-
-  const handleSession = (token: string, user: IUser) => {
-    createSession(token, user);
-    navigate(PATHNAMES.HOME);
-  };
-
-  const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMessage("");
-    setLoginLoading(true);
-    login(formData.email, formData.password)
-      .then((res: ILoginResponse) => {
-        handleSession(res.accessToken, res.user);
-      })
-      .catch(setMessage)
-      .finally(() => setLoginLoading(false));
+    setFormData({ ...formData, email: e.target.value });
   };
+
+  const handleChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setMessage("");
+    setFormData({ ...formData, password: e.target.value });
+  };
+
+  const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const result = await execute(login(formData.email, formData.password));
+		if(result !== null)
+			navigate(PATHNAMES.HOME);
+  };
+
+  onError(setMessage);
+  onLoading(setMessage);
 
   return (
     <>
@@ -54,7 +47,7 @@ const LoginForm: React.FC = () => {
             required
             type="email"
             placeholder="email"
-            disabled={loginLoading}
+            disabled={loading}
             value={formData.email}
             onChange={handleChangeEmail}
           />
@@ -64,26 +57,15 @@ const LoginForm: React.FC = () => {
             required
             type="password"
             placeholder="password"
-            disabled={loginLoading}
+            disabled={loading}
             value={formData.password}
             onChange={handleChangePassword}
           />
           <br />
-          {loginLoading && (
-            <>
-              <span>Loading...</span>
-              <br />
-            </>
-          )}
-          {message && (
-            <>
-              <span>{message}</span>
-              <br />
-            </>
-          )}
-          <button type="submit" disabled={loginLoading}>
+          <button type="submit" disabled={loading}>
             Login
           </button>
+          {message && <div aria-live="polite">{message}</div>}
         </form>
       </section>
     </>

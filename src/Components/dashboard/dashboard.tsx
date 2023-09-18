@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import { ROLES } from "../../models/role.d";
 import { getSession } from "../../services/token-repository";
 import "./dashboard.css";
 import { PATHNAMES } from "../../services/route-service";
@@ -9,7 +8,7 @@ const Dashboard: React.FC = () => {
 
   return (
     <ul>
-      {user.role === ROLES.admin && (
+      {user.role === "admin" && (
         <>
           <li>
             <Link to={PATHNAMES.PRODUCTS}>Administrar productos</Link>
@@ -19,7 +18,7 @@ const Dashboard: React.FC = () => {
           </li>
         </>
       )}
-      {(user.role === ROLES.admin || user.role === ROLES.waiter) && (
+      {(user.role === "admin" || user.role === "waiter") && (
         <>
           <li>
             <Link to={PATHNAMES.ORDERS + "/" + PATHNAMES.CREATE}>
