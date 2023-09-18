@@ -5,16 +5,16 @@ import TrashIcon from "../trash-icon/trash-icon";
 
 type OrderProductListProps = {
   order: NewOrder;
-  addProduct: (product: Product) => void;
-  removeProduct: (product: Product) => void;
-  removeProductFromList: (product: Product) => void;
+	disableForm: boolean;
+  onModifyProductQty: (payload: OrderProduct) => void;
+  onRemoveProductFromList: (product: Product) => void;
 };
 
 const OrderProductList: React.FC<OrderProductListProps> = ({
   order,
-  addProduct,
-  removeProduct,
-  removeProductFromList,
+	disableForm,
+  onModifyProductQty,
+  onRemoveProductFromList,
 }) => {
   return (
     <>
@@ -30,16 +30,17 @@ const OrderProductList: React.FC<OrderProductListProps> = ({
             <button
               aria-label={"Remove one " + orderProduct.product.name}
               className="pseudo"
-              onClick={() => removeProduct(orderProduct.product)}
-              disabled={orderProduct.qty === 1}
+              onClick={() => onModifyProductQty({ product: orderProduct.product, qty: -1 })}
+							disabled={disableForm || orderProduct.qty === 1}
             >
               -
             </button>
             <span>{orderProduct.qty}</span>
             <button
+							disabled={disableForm}
               aria-label={"Add one more " + orderProduct.product.name}
               className="pseudo"
-              onClick={() => addProduct(orderProduct.product)}
+              onClick={() => onModifyProductQty({ product: orderProduct.product, qty: 1 })}
             >
               +
             </button>
@@ -48,9 +49,10 @@ const OrderProductList: React.FC<OrderProductListProps> = ({
             </span>
             <span>$ {orderProduct.qty * orderProduct.product.price}</span>
             <button
+							disabled={disableForm}
               aria-label="Remove product"
               className="pseudo trash-button"
-              onClick={() => removeProductFromList(orderProduct.product)}
+              onClick={() => onRemoveProductFromList(orderProduct.product)}
             >
               <TrashIcon className={styles.trash_icon} />
             </button>

@@ -23,27 +23,21 @@ const reducer = (state: NewOrder, action: WaiterReduceParams): NewOrder => {
       };
     case "RESET_ORDER":
       return initialOrder;
-    case "ADD_PRODUCT":
-    case "DEL_PRODUCT": {
-      const modifier = action.type === "ADD_PRODUCT" ? 1 : -1;
-      const productToModify = action.payload as Product;
+    case "MODIFY_QTY_PRODUCT": {
+      const payload = action.payload as OrderProduct;
       const inList = state.products.find(
         (orderProduct: OrderProduct) =>
-          orderProduct.product.id === productToModify.id,
+          orderProduct.product.id === payload.product.id,
       );
       const mappedList = state.products.map((orderProduct: OrderProduct) => {
-        const isThis = orderProduct.product.id === productToModify.id;
+        const isThis = orderProduct.product.id === payload.product.id;
 
         return {
           ...orderProduct,
-          qty: isThis ? orderProduct.qty + modifier : orderProduct.qty,
+          qty: isThis ? orderProduct.qty + payload.qty : orderProduct.qty,
         };
       });
-      const thisProd = {
-        product: productToModify,
-        qty: modifier,
-      };
-      const newList = inList ? mappedList : [...state.products, thisProd];
+      const newList = inList ? mappedList : [...state.products, payload];
 
       return {
         ...state,
@@ -94,10 +88,8 @@ const Waiter: React.FC = () => {
     );
     if (type !== null) setSelectedCategory(type as PRODUCT_TYPE);
   };
-  const handleAddProduct = (product: Product) =>
-    onDispatch({ type: "ADD_PRODUCT", payload: product });
-  const handleRemoveProduct = (product: Product) =>
-    onDispatch({ type: "DEL_PRODUCT", payload: product });
+  const handleModifyProductQty = (payload: OrderProduct) =>
+    onDispatch({ type: "MODIFY_QTY_PRODUCT", payload });
   const handleRemoveProductFromList = (product: Product) =>
     onDispatch({ type: "DEL_PRODUCT_FROM_LIST", payload: product });
   const getAllProducts = async () => setProducts(await getProducts());
@@ -142,15 +134,14 @@ const Waiter: React.FC = () => {
             products={products.filter(
               (product: Product) => product.type === selectedCategory,
             )}
-            onAddProduct={handleAddProduct}
+            onModifyProductQty={handleModifyProductQty}
           />
         </section>
         <section className={styles.product_container_section}>
           <CreateOrder
             order={state}
-            onRemoveProduct={handleRemoveProduct}
             onRemoveProductFromList={handleRemoveProductFromList}
-            onAddProduct={handleAddProduct}
+            onModifyProductQty={handleModifyProductQty}
             onChangeCustomer={handleChangeCustomer}
             onSubmit={handleSubmitCreateOrder}
             disableForm={loading}

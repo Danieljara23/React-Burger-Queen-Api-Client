@@ -25,21 +25,17 @@ describe("<CreateOrder />", () => {
   };
 
   test("Should show total prices as expected when have selected products", () => {
-    const { container } = render(
+    const { getByText } = render(
       <CreateOrder
         order={order}
-        onRemoveProduct={anyFunction}
-        onAddProduct={anyFunction}
+        onModifyProductQty={anyFunction}
         onChangeCustomer={anyFunction}
         onRemoveProductFromList={anyFunction}
         onSubmit={anyFunction}
         disableForm={false}
       />,
     );
-    const totalElement = container.getElementsByClassName(
-      "create-order-total-cost",
-    )[0];
-    expect(totalElement).toHaveTextContent("Total cost: $1500");
+    expect(getByText("Total cost: $1500")).toBeInTheDocument();
   });
 
   test("Should show as disable submit button when client name is not set", async () => {
@@ -50,9 +46,8 @@ describe("<CreateOrder />", () => {
     const { findByRole } = render(
       <CreateOrder
         order={newOrder}
-        onRemoveProduct={anyFunction}
         onRemoveProductFromList={anyFunction}
-        onAddProduct={anyFunction}
+        onModifyProductQty={anyFunction}
         onChangeCustomer={anyFunction}
         onSubmit={anyFunction}
         disableForm={false}
@@ -73,9 +68,8 @@ describe("<CreateOrder />", () => {
     const { findByRole } = render(
       <CreateOrder
         order={newOrder}
-        onRemoveProduct={anyFunction}
         onRemoveProductFromList={anyFunction}
-        onAddProduct={anyFunction}
+        onModifyProductQty={anyFunction}
         onChangeCustomer={anyFunction}
         onSubmit={anyFunction}
         disableForm={false}
@@ -92,9 +86,8 @@ describe("<CreateOrder />", () => {
     const { findByRole } = render(
       <CreateOrder
         order={order}
-        onRemoveProduct={anyFunction}
         onRemoveProductFromList={anyFunction}
-        onAddProduct={anyFunction}
+        onModifyProductQty={anyFunction}
         onChangeCustomer={anyFunction}
         onSubmit={anyFunction}
         disableForm={false}

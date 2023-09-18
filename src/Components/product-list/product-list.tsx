@@ -1,14 +1,15 @@
+import { OrderProduct } from "../../models/order";
 import { Product } from "../../models/product";
 import styles from "./product-list.module.css";
 
 type ProductListProps = {
   products: Product[];
-  onAddProduct: (product: Product) => void;
+  onModifyProductQty: (payload: OrderProduct) => void;
 };
 
 const ProductList: React.FC<ProductListProps> = ({
   products,
-  onAddProduct: addProduct,
+  onModifyProductQty,
 }) => {
   return (
     <ul className={styles.product_list_container}>
@@ -16,7 +17,7 @@ const ProductList: React.FC<ProductListProps> = ({
         <li
           className={styles.product_list_container_li}
           key={product.id}
-          onClick={() => addProduct(product)}
+          onClick={() => onModifyProductQty({ product, qty: 1})}
         >
           {product.name}
           <img

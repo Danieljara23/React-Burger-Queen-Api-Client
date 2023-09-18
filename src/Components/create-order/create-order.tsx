@@ -5,8 +5,7 @@ import styles from "./create-order.module.css";
 
 type CreateOrderProps = {
   order: NewOrder;
-  onAddProduct: (product: Product) => void;
-  onRemoveProduct: (product: Product) => void;
+  onModifyProductQty: (payload: OrderProduct) => void;
   onRemoveProductFromList: (product: Product) => void;
   onChangeCustomer: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onSubmit: (e: React.ChangeEvent<HTMLFormElement>) => void;
@@ -16,9 +15,8 @@ type CreateOrderProps = {
 const CreateOrder: React.FC<CreateOrderProps> = ({
   order,
   disableForm,
-  onRemoveProduct,
   onRemoveProductFromList,
-  onAddProduct,
+  onModifyProductQty,
   onChangeCustomer,
   onSubmit,
 }) => {
@@ -27,9 +25,9 @@ const CreateOrder: React.FC<CreateOrderProps> = ({
       <h2>Create order</h2>
       <OrderProductList
         order={order}
-        addProduct={onAddProduct}
-        removeProduct={onRemoveProduct}
-        removeProductFromList={onRemoveProductFromList}
+				disableForm={disableForm}
+        onModifyProductQty={onModifyProductQty}
+        onRemoveProductFromList={onRemoveProductFromList}
       />
       <div className={styles.create_order_total_cost}>
         {" "}
