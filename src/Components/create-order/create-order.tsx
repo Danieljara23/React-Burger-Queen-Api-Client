@@ -1,12 +1,12 @@
 import { NewOrder, OrderProduct } from "../../models/order";
 import { Product } from "../../models/product";
 import OrderProductList from "../order-product-list/order-product-list";
-import "./create-order.css";
+import styles from "./create-order.module.css";
 
 type CreateOrderProps = {
   order: NewOrder;
-  onAddProduct: (product: Product) => void;
-  onRemoveProduct: (product: Product) => void;
+  onModifyProductQty: (payload: OrderProduct) => void;
+  onRemoveProductFromList: (product: Product) => void;
   onChangeCustomer: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onSubmit: (e: React.ChangeEvent<HTMLFormElement>) => void;
   disableForm: boolean;
@@ -15,8 +15,8 @@ type CreateOrderProps = {
 const CreateOrder: React.FC<CreateOrderProps> = ({
   order,
   disableForm,
-  onRemoveProduct,
-  onAddProduct,
+  onRemoveProductFromList,
+  onModifyProductQty,
   onChangeCustomer,
   onSubmit,
 }) => {
@@ -25,10 +25,11 @@ const CreateOrder: React.FC<CreateOrderProps> = ({
       <h2>Create order</h2>
       <OrderProductList
         order={order}
-        addProduct={onAddProduct}
-        removeProduct={onRemoveProduct}
+				disableForm={disableForm}
+        onModifyProductQty={onModifyProductQty}
+        onRemoveProductFromList={onRemoveProductFromList}
       />
-      <div className="create-order-total-cost">
+      <div className={styles.create_order_total_cost}>
         {" "}
         Total cost: $
         {order.products.reduce(
@@ -38,12 +39,12 @@ const CreateOrder: React.FC<CreateOrderProps> = ({
         )}
       </div>
       <form onSubmit={onSubmit}>
-        <label htmlFor="costumer-name">Costumer name:</label>
+        <label htmlFor="customer-name">Customer name:</label>
         <input
           type="text"
           required
-          name="costumer-name"
-          id="costumer-name"
+          name="customer-name"
+          id="customer-name"
           value={order.client}
           onChange={onChangeCustomer}
           disabled={disableForm}

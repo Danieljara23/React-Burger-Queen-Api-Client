@@ -1,0 +1,25 @@
+.product_list_container {
+	display: flex;
+	flex-wrap: wrap;
+	list-style-type: none;
+	padding-inline-start: 0;
+	gap: 10px;
+	justify-content: center;
+	overflow-y: auto;
+	max-height: calc(100vh - 321px);
+}
+
+.product_list_container_li {
+	width: 100px;
+	border: solid 1px #D9B100;
+	border-radius: 15px;
+	padding: 5px;
+	text-align: center;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.product_list_container_img {
+	width: 100%;
+}

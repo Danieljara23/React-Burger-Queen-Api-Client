@@ -1,4 +1,5 @@
 import { User } from "../../models/user";
+import styles from "./nav-bar.module.css";
 
 type NavBarProps = {
   onLogout: () => void;
@@ -10,8 +11,8 @@ const NavBar: React.FC<NavBarProps> = ({ onLogout, user }) => {
 
   return (
     userSignedIn && (
-      <nav>
-        <ul>
+      <nav className={styles.nav}>
+        <ul className={styles.nav_ul}>
           <li>
             <button onClick={onLogout}>Sign out</button>
           </li>

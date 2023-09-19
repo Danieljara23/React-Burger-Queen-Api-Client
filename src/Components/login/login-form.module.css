@@ -1,8 +1,8 @@
-.login-site {
+.login_site {
 	width: 50%;
 	margin: auto;
 }
 
-.login-site > img {
+.login_site_img {
 	width: 100%;
 }

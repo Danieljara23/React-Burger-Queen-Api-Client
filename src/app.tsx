@@ -3,7 +3,6 @@ import {
   RouterProvider,
   createBrowserRouter,
 } from "react-router-dom";
-import "./app.css";
 import Layout from "./pages/layout";
 import { PATHNAMES } from "./services/route-service";
 import { ProtectedRoute } from "./routes/protected-route";

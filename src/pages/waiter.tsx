@@ -1,133 +1,147 @@
-import { useEffect, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 import { getProducts } from "../services/product-repository";
 import { PRODUCT_TYPE, Product } from "../models/product.d";
-import { NewOrder, OrderProduct } from "../models/order.d";
+import { NewOrder, OrderProduct, WaiterReduceParams } from "../models/order.d";
 import ProductList from "../Components/product-list/product-list";
-import "./waiter.css";
+import styles from "./waiter.module.css";
 import CreateOrder from "../Components/create-order/create-order";
 import { createOrder } from "../services/order-repository";
+import { couldNotCreate, createdCorrectly } from "../resources";
 import { useRequestHook } from "../Hooks/use-request-hook";
-
-const ADD_PRODUCT = true;
-const REMOVE_PRODUCT = false;
 
 const initialOrder: NewOrder = {
   client: "",
   products: [],
 };
 
+const reducer = (state: NewOrder, action: WaiterReduceParams): NewOrder => {
+  switch (action.type) {
+    case "SET_CUSTOMER_NAME":
+      return {
+        ...state,
+        client: action.payload as string,
+      };
+    case "RESET_ORDER":
+      return initialOrder;
+    case "MODIFY_QTY_PRODUCT": {
+      const payload = action.payload as OrderProduct;
+      const inList = state.products.find(
+        (orderProduct: OrderProduct) =>
+          orderProduct.product.id === payload.product.id,
+      );
+      const mappedList = state.products.map((orderProduct: OrderProduct) => {
+        const isThis = orderProduct.product.id === payload.product.id;
+
+        return {
+          ...orderProduct,
+          qty: isThis ? orderProduct.qty + payload.qty : orderProduct.qty,
+        };
+      });
+      const newList = inList ? mappedList : [...state.products, payload];
+
+      return {
+        ...state,
+        products: newList,
+      };
+    }
+    case "DEL_PRODUCT_FROM_LIST":
+      return {
+        ...state,
+        products: state.products.filter(
+          ({ product }) => product.id !== (action.payload as Product).id,
+        ),
+      };
+    default:
+      return state;
+  }
+};
+
 const Waiter: React.FC = () => {
+  const [state, dispatch] = useReducer(reducer, initialOrder);
   const [products, setProducts] = useState<Product[]>([]);
-  const [activeTab, setActiveTab] = useState<PRODUCT_TYPE>("Desayuno");
-  const [newOrder, setNewOrder] = useState<NewOrder>(initialOrder);
+  const [selectedCategory, setSelectedCategory] =
+    useState<PRODUCT_TYPE>("Desayuno");
   const [message, setMessage] = useState<string>("");
-  const { loading, execute, onError, onLoading } =
-    useRequestHook();
-  const tabButtonClass = (prodType: PRODUCT_TYPE) =>
-    activeTab === prodType ? "" : "pseudo";
-  const onSetOrder = (newOrder: NewOrder) => {
+  const { loading, execute, useOnError, useOnLoading } = useRequestHook();
+  const onDispatch = (params: WaiterReduceParams) => {
     setMessage("");
-    setNewOrder(newOrder);
+    dispatch(params);
   };
   const handleChangeCustomer = (e: React.ChangeEvent<HTMLInputElement>) =>
-    onSetOrder({ ...newOrder, client: e.target.value });
+    onDispatch({ type: "SET_CUSTOMER_NAME", payload: e.target.value });
   const handleSubmitCreateOrder = async (
     e: React.ChangeEvent<HTMLFormElement>,
   ) => {
     e.preventDefault();
-    let newMsg = "Your order has been created";
-		const result = await execute(createOrder(newOrder));
-		if (result !== null) {
-			onSetOrder(initialOrder);
+    let newMsg = createdCorrectly("order");
+    const result = await execute(createOrder(state));
+    if (result !== null) {
+      onDispatch({ type: "RESET_ORDER", payload: null });
     } else {
-			newMsg = "Something went wrong creating your order";
+      newMsg = couldNotCreate("order");
     }
     setMessage(newMsg);
   };
-
-  /**
-   * add or remove product from order product list
-   * @param add
-   * @param productToModify
-   */
-  const modifyProductList = (add: boolean, productToModify: Product) => {
-    const modifier = add ? 1 : -1;
-    const alreadyInList = newOrder.products.find(
-      (orderProduct: OrderProduct) =>
-        orderProduct.product.id === productToModify.id,
+  const handleSelectedCategory = (e: unknown) => {
+    const type = (e as React.ChangeEvent<HTMLInputElement>).target.getAttribute(
+      "data-type",
     );
-    const mappedList = newOrder.products.map((orderProduct: OrderProduct) => {
-      const isThis = orderProduct.product.id === productToModify.id;
-
-      return {
-        ...orderProduct,
-        qty: isThis ? orderProduct.qty + modifier : orderProduct.qty,
-      };
-    });
-    const thisProd = {
-      product: productToModify,
-      qty: modifier,
-    };
-    const newList = alreadyInList
-      ? mappedList
-      : [...newOrder.products, thisProd];
-
-    onSetOrder({
-      ...newOrder,
-      products: newList.filter(({ qty }) => qty > 0),
-    });
+    if (type !== null) setSelectedCategory(type as PRODUCT_TYPE);
   };
-  const handleActiveTab = (e: unknown)=> {
-	const type = (e as React.ChangeEvent<HTMLInputElement>).target.getAttribute('data-type');
-	if (type !== null)
-		setActiveTab(type as PRODUCT_TYPE);
-};
-  const handleAddProduct = (product: Product) =>
-    modifyProductList(ADD_PRODUCT, product);
-  const handleRemoveProduct = (product: Product) =>
-    modifyProductList(REMOVE_PRODUCT, product);
+  const handleModifyProductQty = (payload: OrderProduct) =>
+    onDispatch({ type: "MODIFY_QTY_PRODUCT", payload });
+  const handleRemoveProductFromList = (product: Product) =>
+    onDispatch({ type: "DEL_PRODUCT_FROM_LIST", payload: product });
   const getAllProducts = async () => setProducts(await getProducts());
-    useEffect(() => {
+  useEffect(() => {
     getAllProducts();
   }, []);
 
-  onError(setMessage);
-  onLoading(setMessage);
+  useOnError(setMessage);
+  useOnLoading(setMessage);
 
   return (
     <>
-      <h1>Waiter</h1>
-      <div className="product-container">
-        <section>
+      <h1 className={styles.h1}>Waiter</h1>
+      <div className={styles.product_container}>
+        <section className={styles.product_container_section}>
           <h2>Products</h2>
           <div>
             <button
-              className={tabButtonClass("Desayuno")}
+              className={
+                selectedCategory === "Almuerzo"
+                  ? styles.product_container_not_selected
+                  : ""
+              }
               data-type="Desayuno"
-              onClick={handleActiveTab}
+              onClick={handleSelectedCategory}
             >
               Breakfast
             </button>
             <button
-              className={tabButtonClass("Almuerzo")}
+              className={
+                selectedCategory === "Desayuno"
+                  ? styles.product_container_not_selected
+                  : ""
+              }
               data-type="Almuerzo"
-              onClick={handleActiveTab}
+              onClick={handleSelectedCategory}
             >
               Lunch
             </button>
           </div>
           <ProductList
             products={products.filter(
-              (product: Product) => product.type === activeTab,
+              (product: Product) => product.type === selectedCategory,
             )}
-            onAddProduct={handleAddProduct}
+            onModifyProductQty={handleModifyProductQty}
           />
         </section>
-        <section>
+        <section className={styles.product_container_section}>
           <CreateOrder
-            order={newOrder}
-            onRemoveProduct={handleRemoveProduct}
-            onAddProduct={handleAddProduct}
+            order={state}
+            onRemoveProductFromList={handleRemoveProductFromList}
+            onModifyProductQty={handleModifyProductQty}
             onChangeCustomer={handleChangeCustomer}
             onSubmit={handleSubmitCreateOrder}
             disableForm={loading}

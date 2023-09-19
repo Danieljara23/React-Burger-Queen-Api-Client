@@ -1,16 +1,21 @@
-.order-list-container {
+.order_list_container {
 	padding-inline-start: 0;
     overflow-y: auto			;
     max-height: calc(100vh - 421px);
 }
 
-.order-list-container > li {
+.order_list_container_li {
 	display: flex;
 	list-style-type: none;
 	align-items: center;
     gap: 10px;
 }
 
-.order-list-container span.product-name {
+.order_list_container_product_name {
 	flex: 1;
+}
+
+.trash_icon {
+	width: 25px;
+	height: auto;
 }

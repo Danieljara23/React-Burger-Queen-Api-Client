@@ -1,0 +1,16 @@
+.header {
+    background: #d9b100;
+    text-align: center;
+}
+
+.header_span {
+	font-size: 40px;
+	font-weight: bold;
+}
+
+.footer {
+	position: fixed;
+    right: 0;
+    bottom: 0;
+    margin: 5px;
+}

@@ -1,14 +1,14 @@
 import { useState } from "react";
 import { login } from "../../services/token-repository";
 import burgerImg from "../../assets/burger.jpg";
-import "./login-form.css";
+import styles from "./login-form.module.css";
 import { useNavigate } from "react-router-dom";
 import { PATHNAMES } from "../../services/route-service";
 import { useRequestHook } from "../../Hooks/use-request-hook";
 
 const LoginForm: React.FC = () => {
   const navigate = useNavigate();
-  const { loading, onError, onLoading, execute } = useRequestHook();
+  const { loading, useOnError, useOnLoading, execute } = useRequestHook();
   const [message, setMessage] = useState("");
   const initialFormState = {
     email: "",
@@ -19,28 +19,30 @@ const LoginForm: React.FC = () => {
 
   const handleChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMessage("");
-    setFormData({ ...formData, email: e.target.value });
+    setFormData((prevFormData) => ({ ...prevFormData, email: e.target.value }));
   };
 
   const handleChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMessage("");
-    setFormData({ ...formData, password: e.target.value });
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      password: e.target.value,
+    }));
   };
 
   const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
     const result = await execute(login(formData.email, formData.password));
-		if(result !== null)
-			navigate(PATHNAMES.HOME);
+    if (result !== null) navigate(PATHNAMES.HOME);
   };
 
-  onError(setMessage);
-  onLoading(setMessage);
+  useOnError(setMessage);
+  useOnLoading(setMessage);
 
   return (
     <>
-      <section className="login-site">
-        <img src={burgerImg} alt="burger" />
+      <section className={styles.login_site}>
+        <img src={burgerImg} className={styles.login_site_img} alt="burger" />
         <form onSubmit={handleSubmit}>
           <label htmlFor="user-email">E-mail:</label>
           <input

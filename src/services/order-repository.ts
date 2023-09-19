@@ -1,5 +1,5 @@
 import { NewOrder, Order } from "../models/order";
-import { host, jsonFetch } from "./common-service";
+import { adjustDateString, host, jsonFetch } from "./common-service";
 import { getSession } from "./token-repository";
 
 /**
@@ -10,16 +10,11 @@ import { getSession } from "./token-repository";
 export function createOrder(order: NewOrder): Promise<boolean> {
   const { userId, token } = getSession();
   const url = host + "/orders";
-  const adjustDateString = (date: Date) =>
-    date
-      .toISOString()
-      .replace(/T/, " ")
-      .replace(/\.[\d]{3}Z/, "");
   const orderToRequest: Order = {
     ...order,
     userId: userId,
     dateEntry: adjustDateString(new Date()),
-	status: "pending",
+    status: "pending",
   };
 
   return jsonFetch({
